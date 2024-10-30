@@ -187,6 +187,10 @@
                 <div class="table-responsive">
                       <table class="table table-de mb-0">                    
                         <tbody>
+                            <tr>
+                              <td>Captcha Income</td>
+                              <td> <%=captcha%></td>
+                            </tr>
                           <tr>
                             <td>Direct income</td>
                             <td> <%=direct%></td>
@@ -196,32 +200,104 @@
                             <td> <%=level%></td>                        
                           </tr>
                           <tr>
-                            <td>Captcha Income</td>
-                            <td> <%=captcha%></td>
-                          </tr>
-                          <tr>
-                            <td>Captcha Robot Income</td>
-                            <td>0</td>                        
-                          </tr>
-                          <tr>
                             <td>Club Income</td>
                             <td><%=club%></td>                        
                           </tr>
                           <tr>
-                            <td>Franchise Income</td>
-                            <td> <%=franchise%> </td>                        
-                          </tr>
+                            <td>Captcha Robot Income</td>
+                            <td>0</td>                        
+                          </tr>  
                           <tr>
-                            <td>Activation Income</td>
-                            <td> <%=addition%> </td>                        
-                          </tr>    
-                          <tr>
-                            <td>Self Income</td>
+                            <td>Upgrade Income</td>
                             <td> <%=addition2%> </td>                        
                           </tr>                          
                         </tbody>
                       </table>
                     </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="col-md-8 col-12">
+                        <p><strong>Captcha Work Income:</strong></p>
+                        <h2 class="availableBalance"><%=captcha%></h2>
+                        <div class="font-small-3 clearfix">
+                            <a href="/transaction/captcha" class="float-right btn btn-danger text-white text-right">History</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="col-md-8 col-12">
+                        <p><strong>Direct Income:</strong></p>
+                        <h1 class="availableBalance"><%=direct%></h1>
+                        <div class="font-small-3 clearfix">
+                            <a href="/transaction/direct" class="float-right btn btn-danger text-white text-right">History</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="col-md-8 col-12">
+                        <p><strong>Level Income:</strong></p>
+                        <h1 class="availableBalance"><%=level%></h1>
+                        <div class="font-small-3 clearfix">
+                            <a href="/transaction/level" class="float-right btn btn-danger text-white text-right">History</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="col-md-8 col-12">
+                        <p><strong>Club Income:</strong></p>
+                        <h1 class="availableBalance"><%=club%></h1>
+                        <div class="font-small-3 clearfix">
+                            <a href="/transaction/club" class="float-right btn btn-danger text-white text-right">History</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="col-md-8 col-12">
+                        <p><strong>Captcha Robot Income:</strong></p>
+                        <h1 class="availableBalance"><%=addition3%></h1>
+                        <div class="font-small-3 clearfix">
+                            <a href="/transaction/robot" class="float-right btn btn-danger text-white text-right">History</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="col-md-8 col-12">
+                        <p><strong>Reactivate & Upgrade Income:</strong></p>
+                        <h1 class="availableBalance"><%=addition2%></h1>
+                        <div class="font-small-3 clearfix">
+                            <a href="/transaction/reActivation" class="float-right btn btn-danger text-white text-right">History</a>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -252,28 +328,44 @@
                 <form class="form form-horizontal my-2 mx-2">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-12 col-md-5">
-                                <div class="form-group row">
-                                    <label class="col-2 label-control" for="projectinput1">Enter amount</label>
-                                    <fieldset class="col-10">
-                                      <div class="input-group">
-                                        <input type="number" name="amount" id="amount" class="form-control" placeholder="0" aria-describedby="basic-addon4">
-                                      </div>
-                                    </fieldset>
+                            <%if(mode == 'ON'){%>
+                                <div class="col-12 col-md-5">
+                                    <div class="form-group row">
+                                        <label class="col-2 label-control" for="projectinput1">Enter amount</label>
+                                        <fieldset class="col-10">
+                                          <div class="input-group">
+                                            <input type="number" name="amount" id="amount" class="form-control" placeholder="0" aria-describedby="basic-addon4">
+                                          </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-4 col-12 text-center text-md-right">
+                                        <button type="button" onclick="withdraw()" class="btn-gradient-secondary mt-2">Withdraw <i class="la la-angle-right"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 col-12 text-center text-md-right">
-                                    <button type="button" onclick="withdraw()" class="btn-gradient-secondary mt-2">Withdraw <i class="la la-angle-right"></i></button>
+                            <%}else{%>
+                                <div class="col-12 col-md-5">
+                                    <div class="form-group row">
+                                        <label class="col-2 label-control" for="projectinput1">Enter amount</label>
+                                        <fieldset class="col-10">
+                                          <div class="input-group">
+                                            <input type="number" disabled name="amount" id="amount" class="form-control" placeholder="0" aria-describedby="basic-addon4">
+                                          </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-4 col-12 text-center text-md-right">
+                                        <button type="button" disabled class="btn-gradient-secondary mt-2">Withdraw <i class="la la-angle-right"></i></button>
+                                    </div>
                                 </div>
-                            </div>
+                            <%}%>
                         </div>
                     </div>
                 </form>
                 <h6 class="mx-1">Kindly Note</h6>
                 <ol>
                     <li>Minimum withdrawal amount is 200</li>
-                    <li>Withdrawals may take upto 24 working hours</li>
+                    <li>Withdrawals may take upto 24 to 72 working hours</li>
                     <li>Transaction charges applied</li>
-                    <li>Only one withdrawal per day.</li>
+                    <li>Withdrawal opens only on Wednesday and Saturday.</li>
                 </ol>
                 <div id="alert"></div>
             </div>

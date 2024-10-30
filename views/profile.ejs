@@ -184,8 +184,9 @@
                                 <form class="form-horizontal form-referral-link row mt-2" action="">
                                     <div class="col-12">
                                         <fieldset class="form-label-group">
-                                            <input type="text" class="form-control" id="referral-link" value="https://mycaptchahub.in/<%=userID%>" required="" autofocus="">
+                                            <input type="text" class="form-control" id="referral-link" value="https://mycaptchahub.in/register/<%=userID%>" required="" autofocus="">
                                             <label for="first-name">Referral link</label>
+                                            <a href="https://api.whatsapp.com/send?text=https://mycaptchahub/register/<%= userID %>" class="btn btn-warning round mr-1 mt-1 mb-0">Share</a>
                                         </fieldset>
                                     </div>
                                 </form>
@@ -213,6 +214,7 @@
 
     <!-- BEGIN VENDOR JS-->
     <script src="../assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
     <script src="../assets/vendors/js/forms/toggle/switchery.min.js" type="text/javascript"></script>

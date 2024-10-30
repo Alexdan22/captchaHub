@@ -211,6 +211,7 @@ const pinSchema = new mongoose.Schema({
   }
 })
 const qrDataSchema = new mongoose.Schema({ text: String });
+const withdrawalSchema = new mongoose.Schema({mode: String});
 
 
 userSchema.plugin(encrypt, {secret:process.env.SECRET, encryptedFields: ['password'] });
@@ -225,6 +226,8 @@ const Data = new mongoose.model('Data', qrDataSchema);
 
 const Pin = new mongoose.model('Pin', pinSchema);
 
+const Switch = new mongoose.model('Switch', withdrawalSchema);
+
 
 //ROUTES
 app.get("/", function(req, res){
@@ -233,12 +236,13 @@ app.get("/", function(req, res){
 });
 
 app.get("/register", function(req, res){
-  if(req.session.sponsorID){
+  console.log(req.session.sponsorID);
+  
+  if(req.session.sponsorID != undefined){
     const alert = "false";
     const sponsor = 'true';
     const sponsorID = req.session.sponsorID;
     res.render("register", {
-      sponID:req.session.sponsorID,
       alert,
       sponsor,
       sponsorID
@@ -253,6 +257,34 @@ app.get("/register", function(req, res){
   }
 });
 
+app.get('/updateSwitch', async (req, res)=>{
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    const foundSwitch = await Switch.find({});
+    const mode = foundSwitch[0];
+    
+    if(mode.mode == 'ON'){
+      await Switch.updateOne({mode:mode.mode}, {$set:{mode:'OFF'}});
+      res.status(200).send({mode:'Turned OFF'})
+    }
+    if(mode.mode == 'OFF'){
+      await Switch.updateOne({mode:mode.mode}, {$set:{mode:'ON'}});
+      res.status(200).send({mode:'Turned ON'})
+    }
+  }
+});
+
+app.get("/register/:sponsorID", function(req, res){
+
+  req.session.sponsorID = req.params.sponsorID;
+
+  const alert = "false";
+  const sponsor = 'true';
+  const sponsorID = req.session.sponsorID;
+  res.redirect('/register');
+});
+
 app.get("/dashboard", async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/");
@@ -260,6 +292,8 @@ app.get("/dashboard", async (req, res) => {
 
   try {
     const foundUser = await User.findOne({ email: req.session.user.email });
+    const foundSwitch = await Switch.find({});
+    const mode = foundSwitch[0];
     if (!foundUser) {
       return res.redirect("/");
     }
@@ -293,6 +327,7 @@ app.get("/dashboard", async (req, res) => {
     res.render("dashboard", {
       name,
       email,
+      mode:mode.mode,
       userID,
       captcha,
       franchise,
@@ -480,19 +515,6 @@ app.get("/admin", async function(req, res) {
   }
 });
 
-// app.get("/adminUpdate", async function(req, res){
-//   try{
-//     const newAdmin = new Admin({
-//       email:process.env.ADMIN,
-//       payment:[],
-//       withdrawal:[]
-//     });
-//     newAdmin.save();
-//   }catch(err){
-//     console.log(err);
-//   }
-// });
-
 app.get('/transaction', async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/");
@@ -502,8 +524,86 @@ app.get('/transaction', async (req, res) => {
       if (foundUser) {
         res.status(200).render('transaction',{
           name: foundUser.username,
+          tab: 'false',
           email: foundUser.email,
           transaction: foundUser.transaction,
+          alert: 'nil'
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+});
+
+app.get('/transaction/:category', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/");
+  } else {
+    try {
+      const foundUser = await User.findOne({ email: req.session.user.email });
+      
+      //Required Transaction Category
+      let category = [];
+      const input = req.params.category;
+
+      if(input == 'captcha'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if('Daily Captcha' == data.from){
+            category.push(data);
+          }
+        });
+      }
+      if(input == 'direct'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if(data.from == 'Direct'){
+            category.push(data);
+          }
+        });
+      }
+      if(input == 'level'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if(data.from == 'Level - 1' || data.from == 'Level - 2' || data.from == 'Level - 3' || data.from == 'Level - 4' || data.from == 'Level - 5' || data.from == 'Level - 6' || data.from == 'Level - 7' || data.from == 'Level - 8' ||  data.from == 'Level - 9' || data.from == 'Level - 10'){
+            category.push(data);
+          }
+        });
+      }
+      if(input == 'club'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if(data.from == 'Club'){
+            category.push(data);
+          }
+        });
+      }
+      if(input == 'robot'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if(data.from == 'Captcha Robot'){
+            category.push(data);
+          }
+        });
+      }
+      if(input == 'reActivation'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if(data.from == 'Upgrade'){
+            category.push(data);
+          }
+        });
+      }
+
+      
+
+      if (foundUser) {
+        res.status(200).render('transaction',{
+          name: foundUser.username,
+          tab: 'true',
+          email: foundUser.email,
+          transaction: category,
           alert: 'nil'
         });
       }
@@ -1859,15 +1959,15 @@ app.post("/api/creditWithdrawal", async function(req, res) {
             $set: {
               earnings: {
                 captcha: foundUser.earnings.captcha,
-              franchise: foundUser.earnings.franchise,
-              total: foundUser.earnings.total,
-              direct: foundUser.earnings.direct,
-              level: foundUser.earnings.level,
-              club: foundUser.earnings.club,
-              addition: foundUser.earnings.addition,
-              addition2: foundUser.earnings.addition2,
-              addition3: foundUser.earnings.addition3,
-              balance: foundUser.earnings.balance + Math.floor(Number(req.body.amount))
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + Math.floor(Number(req.body.amount))
               }
             }
           });
@@ -1964,6 +2064,59 @@ app.post('/userPanel', async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.post('/creditBalance', async (req, res)=>{
+  const timeZone = 'Asia/Kolkata';
+  const currentTimeInTimeZone = DateTime.now().setZone(timeZone);
+
+  let year = currentTimeInTimeZone.year;
+  let month = currentTimeInTimeZone.month;
+  let date = currentTimeInTimeZone.day;
+
+
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      
+      const foundUser = await User.findOne({email:req.body.email});
+      await User.updateOne({ email: foundUser.email }, {
+        $set: {
+          earnings: {
+            captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + Math.floor(Number(req.body.amount)),
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + Math.floor(Number(req.body.amount))
+          }
+        }
+      });
+  
+      const trnxID = String(Math.floor(Math.random() * 9999999));
+  
+      const newTransaction = {
+        type: 'Credit',
+        from: 'Income',
+        amount: req.body.amount,
+        status: 'success',
+        time: { date, month, year },
+        trnxId: trnxID
+      };
+  
+      await User.updateOne({ email: foundUser.email }, {
+        $push: { transaction: newTransaction }
+      });
+      res.redirect('/admin');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+})
 
 
 
