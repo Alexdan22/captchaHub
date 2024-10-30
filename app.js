@@ -319,6 +319,7 @@ app.get("/dashboard", async (req, res) => {
         balance
       },
       status,
+      time,
       package
     } = foundUser;
 
@@ -342,6 +343,7 @@ app.get("/dashboard", async (req, res) => {
       balance,
       package,
       alert,
+      time,
       status
     });
   } catch (err) {
@@ -637,7 +639,7 @@ app.get('/api/dailyTask', async (req, res) =>{
         amount = 50;
       }
       if(foundUser.package.stage == 7500){
-        amount = 100;
+        amount = 150;
       }
       
       if(foundUser.package.status == 'Active'){

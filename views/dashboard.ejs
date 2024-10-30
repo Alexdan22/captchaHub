@@ -95,8 +95,49 @@
         </div>
     </div>
     <div class="col-md-4 col-12">
+        
 
         <%if(status == 'Active'){%>
+            <section class="card pull-up">
+            <div class="card-header">
+                <h6 class="card-title text-center">Plan Details</h6>            
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <%console.log(package)%>
+                            <%if(package.stage == 240){%>
+                            <div class="col-md-2 col-12 py-1">
+                                <span class="d-inline-block d-md-none text-bold-700">Current Plan: </span><a href="#" class="mb-0 btn-sm btn btn-outline-info round">SILVER</a>
+                            </div>
+                            <%}%>
+                            <%if(package.stage == 2000){%>
+                                
+                            <div class="col-md-2 col-12 py-1">
+                                <span class="d-inline-block d-md-none text-bold-700">Current Plan: </span><a href="#" class="mb-0 btn-sm btn btn-outline-info round">GOLD</a>
+                            </div>
+                            <%}%>
+                            <%if(package.stage == 7500){%>
+                                
+                            <div class="col-md-2 col-12 py-1">
+                                <span class="d-inline-block d-md-none text-bold-700">Current Plan: </span><a href="#" class="mb-0 btn-sm btn btn-outline-info round">DIAMOND</a>
+                            </div>
+                            <%}%>
+                            <div class="col-md-2 col-12 py-1">
+                                <p class="mb-0"><span class="d-inline-block d-md-none text-bold-700">Amount: </span>  <%=package.stage%> </p>
+                            </div>
+                            <div class="col-md-1 col-12 py-1">
+                                <p class="mb-0"><span class="d-inline-block d-md-none text-bold-700">User Id: </span> <%=userID%></p>
+                            </div>
+                            <div class="col-md-3 col-12 py-1">
+                                <p class="mb-0"><span class="d-inline-block d-md-none text-bold-700">Expires in </span> <%=package.days%> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
             <%if(package.status == 'Active'){%>
                 <div class="card">
                     <div class="card-header">
