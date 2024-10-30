@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="CryptoDash admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, CryptoDash Cryptocurrency Dashboard Template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="ThemeSelection">
+    <title>Dashboard - Captcha Hub</title>
+    <link rel="apple-touch-icon" href="../assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i|Comfortaa:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+    crossorigin="anonymous" />
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist-plugin-tooltip.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/app.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/core/menu/menu-types/vertical-compact-menu.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/timeline.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/dashboard-ico.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <!-- END Custom CSS-->
+  </head>
+  <body class="vertical-layout vertical-compact-menu 2-columns   menu-expanded fixed-navbar" onload="createCaptcha()" data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+
+    <!-- fixed-top-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-light navbar-bg-color">
+      <div class="navbar-wrapper">
+        <div class="navbar-header d-md-none">
+          <ul class="nav navbar-nav flex-row">
+            <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+            <li class="nav-item d-md-none"><a class="navbar-brand" href="/dashboard"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <div class="main-menu menu-fixed menu-dark menu-bg-default rounded menu-accordion menu-shadow">
+      <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/dashboard"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+          <li class="active"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+          </li>
+          <li class=" nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
+          </li>
+          <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Join today</span></a>
+          </li>
+          <li class=" nav-item"><a href="/transaction"><i class="icon-shuffle"></i><span class="menu-title" data-i18n="">Transactions</span></a>
+          </li>
+          <li class=" nav-item mt-3"><a href="/log-out"><span class="menu-title" data-i18n="">Log out</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="app-content content">
+      <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+<!--Overview -->
+<!-- Account Balance -->
+<div class="row">
+    <div class="col-md-8 col-12">
+        <h6 class="my-2">Account Dashboard</h6>
+        <div class="card pull-up">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <p><strong>Your balance:</strong></p>
+                                <h1 class="availableBalance"><%=balance%></h1>
+                            </div>
+                            <div class="col-md-4 col-12 text-center text-md-right">
+                                <button type="button"data-toggle="modal" data-target="#withdrawalTab" class="btn-gradient-secondary mt-2">Withdraw <i class="la la-angle-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-12">
+
+        <%if(status == 'Active'){%>
+            <%if(package.status == 'Active'){%>
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title text-center">Daily Captcha Work</h6>            
+                    </div>
+                    <hr class="my-0">
+                    <div class="card-content collapse show">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <div class="captcha-container">
+                                <div class="canvas-wrapper">
+                                    <div id="captcha" class="align-items-center"></div>
+                                    <button class="regenerateCaptchaBtn btn btn-sm" style="width: 5rem;" onclick="createCaptcha()">
+                                    <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Enter Captcha" id="cpatchaTextBox" />
+                                <button class="btn btn-gradient-primary my-1" onclick="validateCaptcha()">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <%}%>
+            <%if(package.status == 'Cooldown'){%>
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title text-center">Daily Captcha Work</h6>            
+                    </div>
+                    <hr class="my-0">
+                    <div class="card-content collapse show">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <p>Today's task completed, Next task opens at 1:00pm tommorrow.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <%}%>
+        <%}else{%>
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title text-center">Daily Captcha Work</h6>            
+                </div>
+                <hr class="my-0">
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <p>Enroll today to complete task and earn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <%}%>
+        
+          
+
+        <h6 class="my-2">Franchise Income</h6>
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="font-small-3 clearfix">
+                        <span class="float-left">Become a Franchise</span>
+                    </div>
+                    <%const progressBar = currentCount*10;%>
+                    <%const pending = 10-currentCount;%>
+                    <div class="progress progress-sm my-1 box-shadow-2">
+                        <div class="progress-bar bg-warning" role="progressbar"  id="progressBar" aria-valuenow="<%=progressBar%>" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="font-small-3 clearfix">
+                        <span class="float-right text-right">Pending  <br> <strong><%=pending%></strong></span>
+                    </div>
+                    <div>
+                        <button disabled class="btn btn-primary mt-1">Generate PIN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title text-center">Earnings Overview</h6>            
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <h3 class="text-center"><%=total%></h3>
+                    <p class="mb-0 mt-2">Total Earnings</p>
+                </div>
+                <div class="table-responsive">
+                      <table class="table table-de mb-0">                    
+                        <tbody>
+                          <tr>
+                            <td>Direct income</td>
+                            <td> <%=direct%></td>
+                          </tr>
+                          <tr>
+                            <td>Level income</td>
+                            <td> <%=level%></td>                        
+                          </tr>
+                          <tr>
+                            <td>Captcha Income</td>
+                            <td> <%=captcha%></td>
+                          </tr>
+                          <tr>
+                            <td>Captcha Robot Income</td>
+                            <td>0</td>                        
+                          </tr>
+                          <tr>
+                            <td>Club Income</td>
+                            <td><%=club%></td>                        
+                          </tr>
+                          <tr>
+                            <td>Franchise Income</td>
+                            <td> <%=franchise%> </td>                        
+                          </tr>
+                          <tr>
+                            <td>Activation Income</td>
+                            <td> <%=addition%> </td>                        
+                          </tr>    
+                          <tr>
+                            <td>Self Income</td>
+                            <td> <%=addition2%> </td>                        
+                          </tr>                          
+                        </tbody>
+                      </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ Account Balance -->
+<div class="modal fade" id="withdrawalTab" tabindex="-1" role="dialog" aria-labelledby="withdrawalTab" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="purchaseModalLabel">Withdraw your fund</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-8 col-12 text-center">
+                                    <p>Available balance: <strong class="availableBalance"><%=balance%></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="form form-horizontal my-2 mx-2">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-12 col-md-5">
+                                <div class="form-group row">
+                                    <label class="col-2 label-control" for="projectinput1">Enter amount</label>
+                                    <fieldset class="col-10">
+                                      <div class="input-group">
+                                        <input type="number" name="amount" id="amount" class="form-control" placeholder="0" aria-describedby="basic-addon4">
+                                      </div>
+                                    </fieldset>
+                                </div>
+                                <div class="col-md-4 col-12 text-center text-md-right">
+                                    <button type="button" onclick="withdraw()" class="btn-gradient-secondary mt-2">Withdraw <i class="la la-angle-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <h6 class="mx-1">Kindly Note</h6>
+                <ol>
+                    <li>Minimum withdrawal amount is 200</li>
+                    <li>Withdrawals may take upto 24 working hours</li>
+                    <li>Transaction charges applied</li>
+                    <li>Only one withdrawal per day.</li>
+                </ol>
+                <div id="alert"></div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+      </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <script>
+        var code;
+
+        function createCaptcha() {
+            // clear the contents of captcha div first 
+            document.getElementById('captcha').innerHTML = "";
+            var charsArray =
+                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@!#$%^&*";
+            var lengthOtp = 6;
+            var captcha = [];
+            for (var i = 0; i < lengthOtp; i++) {
+                //below code will not allow Repetition of Characters
+                var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
+                if (captcha.indexOf(charsArray[index]) == -1)
+                    captcha.push(charsArray[index]);
+                else i--;
+            }
+            var canv = document.createElement("canvas");
+            canv.id = "captcha";
+            canv.width = 110;
+            canv.height = 50;
+            var ctx = canv.getContext("2d");
+            ctx.font = "25px Muli";
+            ctx.fillText(captcha.join(""), 0, 30);
+            //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+            code = captcha.join("");
+            document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
+        }
+
+        function validateCaptcha() {
+            event.preventDefault();
+            if (document.getElementById("cpatchaTextBox").value == code) {
+                console.log("Valid Captcha");
+                dailyTask()
+            } else {
+                console.log("Invalid Captcha. try Again");
+                createCaptcha();
+            }
+        }
+            
+    </script>
+
+
+    <footer class="footer footer-static footer-transparent">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block">Copyright  &copy; <script>
+          document.write(new Date().getFullYear())
+          </script>, All rights reserved. </span></p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          const progressBarElement = document.getElementById('progressBar');
+          progressBarElement.style.width = '<%= progressBar %>%';
+        });
+      </script>
+
+    <!-- BEGIN VENDOR JS-->
+    <script src="../assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="../assets/vendors/js/timeline/horizontal-timeline.js" type="text/javascript"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN MODERN JS-->
+    <script src="../assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="../assets/js/core/app.js" type="text/javascript"></script>
+    <script src="../assets/js/response.js" type="text/javascript"></script>
+    <script src="../assets/js/request.js" type="text/javascript"></script>
+    <!-- END MODERN JS-->
+  </body>
+</html>

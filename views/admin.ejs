@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="CryptoDash admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, CryptoDash Cryptocurrency Dashboard Template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="ThemeSelection">
+    <title>Dashboard - Captcha Hub</title>
+    <link rel="apple-touch-icon" href="../assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i|Comfortaa:300,400,500,700" rel="stylesheet">
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist-plugin-tooltip.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/app.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/core/menu/menu-types/vertical-compact-menu.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/timeline.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/dashboard-ico.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <!-- END Custom CSS-->
+  </head>
+  <body class="vertical-layout vertical-compact-menu 2-columns   menu-expanded fixed-navbar" data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+
+    <!-- fixed-top-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-light navbar-bg-color">
+      <div class="navbar-wrapper">
+        <div class="navbar-header d-md-none">
+          <ul class="nav navbar-nav flex-row">
+            <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+            <li class="nav-item d-md-none"><a class="navbar-brand" href="/dashboard"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <div class="main-menu menu-fixed menu-dark menu-bg-default rounded menu-accordion menu-shadow">
+      <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/dashboard"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+          <li class="active"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+          </li>
+          <li class=" nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
+          </li>
+          <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Join today</span></a>
+          </li>
+          <li class=" nav-item"><a href="/transaction"><i class="icon-shuffle"></i><span class="menu-title" data-i18n="">Transactions</span></a>
+          </li>
+          <li class=" nav-item"><a href="faq.html"><i class="icon-support"></i><span class="menu-title" data-i18n="">FAQ</span></a>
+          </li>
+          <li class=" nav-item"><a href="#"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Account</span></a>
+            <ul class="menu-content">
+              <li><a class="menu-item" href="account-profile.html">Profile</a>
+              </li>
+              <li><a class="menu-item" href="account-login-history.html">Login History</a>
+              </li>
+              <li class="navigation-divider"></li>
+              <li><a class="menu-item" href="#">Misc</a>
+                <ul class="menu-content">
+                  <li><a class="menu-item" href="account-login.html">Login</a>
+                  </li>
+                  <li><a class="menu-item" href="account-register.html">Register</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class=" nav-item mt-3"><a href="/log-out"><span class="menu-title" data-i18n="">Log out</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="app-content content">
+      <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+<!--Overview -->
+<!-- Account Balance -->
+<div class="row">
+    <div class="col-md-8 col-12">
+        <h6 class="my-2">Admin Dashboard</h6>
+        <div class="card pull-up">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <p><strong>Total Users:</strong></p>
+                                <h1><%=total%></h1>
+                            </div>
+                            <div class="col-md-8 col-12">
+                                <p><strong>Active Users:</strong></p>
+                                <h1><%=currentUsers%></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-12 py-1 text-center">
+                        <a href="/api/manualTaskOverride" class="btn-gradient-secondary my-1">Click me for Daily Task Override</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-12">
+
+        <%  if( pendingApproval != 0){    %>
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title text-center">Pending Approval</h6>            
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        
+                <%    payment.forEach(function(newPayment){    %>
+                    <hr>
+                    <div>
+                        <div class="col-md-2 col-12 py-1 text-center">
+                            <h6>Email ID</h6>
+                            <p class="text-muted mb-0 font-small-3"><%=newPayment.email%></p>
+                        </div>
+                        <div class="col-md-2 col-12 py-1 text-center">
+                            <h6>Amount</h6>
+                            <p class="text-muted mb-0 font-small-3"><%=newPayment.amount%></p>
+                        </div>
+                        <div class="col-md-2 col-12 py-1 text-center">
+                            <h6>Trnx ID</h6>
+                            <p class="text-muted mb-0 font-small-3"><%=newPayment.trnxId%></p>
+                        </div>
+                        <div class="col-md-2 col-12 py-1 text-center">
+                            <h6>Date</h6>
+                            <p class="text-muted mb-0 font-small-3">
+                                <%=newPayment.time.hour%>:<%=newPayment.time.minutes%> / <%=newPayment.time.date%>-<%=newPayment.time.month%>-<%=newPayment.time.year%>
+                            </p>
+                        </div>
+                        <div class="">
+                            <form class="form-horizontal form-referral-link row mt-2" action="/planActivation" method="post">
+                                <div class="col-12 mt-2">
+                                    <fieldset class="form-label-group">
+                                        <input type="text" class="form-control" name="directPercentage" id="directPercentage"  required="" autofocus="">
+                                        <label for="directPercentage">Direct Percentage</label>
+                                    </fieldset>
+                                    <input type="text" hidden name="username" value="<%=newPayment.username%>">
+                                    <input type="text" hidden name="email" value="<%=newPayment.email%>">
+                                    <input type="text" hidden name="approval" value="approve">
+                                    <input type="number" hidden name="amount" value="<%=newPayment.amount%>">
+                                    <input type="number" hidden name="trnxId" value="<%=newPayment.trnxId%>">
+                                </div>
+                                <div class="col-md-2 col-12 py-1 text-center">
+                                    <button type="submit" class="btn-gradient-primary my-1">Approve</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="">
+                            <form class="form-horizontal form-referral-link row " action="/planActivation" method="post">
+                                <div class="col-12 mt-2">
+                                    <input type="text" hidden name="username" value="<%=newPayment.username%>">
+                                    <input type="text" hidden name="email" value="<%=newPayment.email%>">
+                                    <input type="text" hidden name="approval" value="false">
+                                    <input type="number" hidden name="amount" value="<%=newPayment.amount%>">
+                                    <input type="number" hidden name="trnxId" value="<%=newPayment.trnxId%>">
+                                </div>
+                                <div class="col-md-2 col-12  text-center">
+                                    <button type="submit" class=" btn-gradient-secondary ">Reject</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                  <%  });    %>
+                </div>
+            </div>
+        </div>
+        <%  }    %>
+
+        
+        <%  if(pendingWithdraw != 0){    %>
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title text-center">Pending Withdrawal</h6>            
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+            <%    withdrawal.forEach(function(invest){    %>
+                <hr>
+                <div>
+                    <div class="col-md-2 col-12 py-1 text-center">
+                        <h6>Email ID</h6>
+                        <p class="text-muted mb-0 font-small-3"><%=invest.email%></p>
+                    </div>
+                    <div class="col-md-2 col-12 py-1 text-center">
+                        <h6>Amount</h6>
+                        <p class="text-muted mb-0 font-small-3"><%=invest.amount%></p>
+                    </div>
+                    <div class="col-md-2 col-12 py-1 text-center">
+                        <h6>Date</h6>
+                        <p class="text-muted mb-0 font-small-3">
+                            <%=invest.time.hour%>:<%=invest.time.minutes%> / <%=invest.time.date%>-<%=invest.time.month%>-<%=invest.time.year%>
+                        </p>
+                    </div>
+                    <div class="row d-flex justify-content-evenly">
+                        <form class="forms-sample" action="/api/creditwithdrawal" method="post">
+                            <div class="form-group row">
+                              <input type="text" hidden name="username" value="<%=invest.username%>">
+                              <input type="text" hidden name="email" value="<%=invest.email%>">
+                              <input type="text" hidden name="approval" value="true">
+                              <input type="number" hidden name="amount" value="<%=invest.amount%>">
+                              <input type="number" hidden name="trnxId" value="<%=invest.trnxId%>">
+                            </div>
+                            <div class="col">
+                            <button name="approve" class="btn text-center btn-rounded btn-success" type="submit">Approve</button>
+                            </div>
+                          </form>
+                          <form class="forms-sample" action="/api/creditwithdrawal" method="post">
+                            <div class="form-group row">
+                              <input type="text" hidden name="username" value="<%=invest.username%>">
+                              <input type="text" hidden name="email" value="<%=invest.email%>">
+                              <input type="text" hidden name="approval" value="false">
+                              <input type="number" hidden name="amount" value="<%=invest.amount%>">
+                              <input type="number" hidden name="trnxId" value="<%=invest.trnxId%>">
+                            </div>
+                            <div class="col">
+                            <button name="reject" class="btn float-end btn-rounded btn-danger" type="submit">Reject</button>
+                            </div>
+                          </form>
+                    </div>
+                </div>
+              <%  });    %>
+            </div>
+        </div>
+    </div>
+        <%  }    %>
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title text-center">User details</h6>            
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                <hr>
+                <div>
+                    <div class="">
+                        <form class="form-horizontal form-referral-link row mt-2" action="/userPanel" method="post">
+                            <div class="col-12 mt-2">
+                                <div class="form-group">
+                                    <label for="type">Select type</label>
+                                    <select class="form-select form-select-sm" name="type" id="type">
+                                      <option>email</option>
+                                      <option>userID</option>
+                                    </select>
+                                  </div>
+                                <fieldset class="form-label-group">
+                                    <input type="text" class="form-control" name="input" id="input"  required="" autofocus="">
+                                    <label for="input">Enter details</label>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-2 col-12 py-1 text-center">
+                                <button type="submit" class="btn-gradient-primary my-1">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+          </div>
+        </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title text-center">QR Update</h6>            
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                <hr>
+                <div>
+                    <div class="">
+                        <form class="form-horizontal form-referral-link row mt-2" action="/qrData" method="post">
+                            <div class="col-12 mt-2">
+                                <fieldset class="form-label-group">
+                                    <input type="text" class="form-control" name="upi" id="upi"  required="" autofocus="">
+                                    <label for="upi">Enter UPI ID</label>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-2 col-12 py-1 text-center">
+                                <button type="submit" class="btn-gradient-primary my-1">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+          </div>
+        </div>
+        </div>
+        
+    </div>
+</div>
+        </div>
+      </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <footer class="footer footer-static footer-transparent">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block">Copyright  &copy; <script>
+          document.write(new Date().getFullYear())
+          </script>, All rights reserved. </span></p>
+    </footer>
+
+    <!-- BEGIN VENDOR JS-->
+    <script src="../assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="../assets/vendors/js/timeline/horizontal-timeline.js" type="text/javascript"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN MODERN JS-->
+    <script src="../assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="../assets/js/core/app.js" type="text/javascript"></script>
+    <!-- END MODERN JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+  </body>
+</html>

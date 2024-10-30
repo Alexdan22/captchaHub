@@ -1,0 +1,28 @@
+{
+  "name": "captcha_hub",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "api": "^6.1.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "luxon": "^3.5.0",
+    "mongoose": "^8.6.2",
+    "mongoose-encryption": "^2.1.2",
+    "node-schedule": "^2.1.1",
+    "path": "^0.12.7",
+    "qrcode": "^1.5.4",
+    "shortid": "^2.2.16",
+    "uuid": "^10.0.0"
+  },
+  "description": ""
+}

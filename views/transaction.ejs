@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="CryptoDash admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, CryptoDash Cryptocurrency Dashboard Template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="ThemeSelection">
+    <title>Transaction - Captcha HUB</title>
+    <link rel="apple-touch-icon" href="../assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i|Comfortaa:300,400,500,700" rel="stylesheet">
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/vendors.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/app.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/core/menu/menu-types/vertical-compact-menu.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/wallet.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <!-- END Custom CSS-->
+  </head>
+  <body class="vertical-layout vertical-compact-menu content-detached-right-sidebar   menu-expanded fixed-navbar" data-open="click" data-menu="vertical-compact-menu" data-col="content-detached-right-sidebar">
+
+    <!-- fixed-top-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-light navbar-bg-color">
+        <div class="navbar-wrapper">
+          <div class="navbar-header d-md-none">
+            <ul class="nav navbar-nav flex-row">
+              <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+              <li class="nav-item d-md-none"><a class="navbar-brand" href="/dashboard"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
+              </ul>
+          </div>
+        </div>
+      </nav>
+  
+      <!-- ////////////////////////////////////////////////////////////////////////////-->
+  
+  
+      <div class="main-menu menu-fixed menu-dark menu-bg-default rounded menu-accordion menu-shadow">
+        <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/dashboard"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
+          <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+            <li class=" nav-item"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+            </li>
+            <li class="nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
+            </li>
+            <li class="active"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Join today</span></a>
+            </li>
+            <li class=" nav-item"><a href="/transaction"><i class="icon-shuffle"></i><span class="menu-title" data-i18n="">Transactions</span></a>
+            </li>
+            <li class=" nav-item mt-3"><a href="/log-out"><span class="menu-title" data-i18n="">Log out</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    <div class="app-content content">
+      <div class="content-wrapper">
+        <div class="content-header row">
+          <div class="content-header-left col-md-8 col-12 mb-2 breadcrumb-new">
+            <h3 class="content-header-title mb-0 d-inline-block">Payment</h3>
+            <div class="row breadcrumbs-top d-inline-block">
+              <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a>
+                  </li>
+                  <li class="breadcrumb-item active">Transaction
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%    if(transaction.length != 0){  %>
+            <div class="row">
+                <div id="recent-transactions" class="col-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table id="recent-orders" class="table table-hover table-xl mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">Status</th>
+                                            <th class="border-top-0">Date</th>
+                                            <th class="border-top-0">Amount</th>
+                                            <th class="border-top-0">Type</th>
+                                            <th class="border-top-0">From</th>
+                                            <th class="border-top-0">Ref no</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+            <%   transaction.forEach(function(payment){  %>
+
+                                    <%   if(payment.status == 'Pending'){  %>
+                                  <%       //Pending warning trnx  %>
+                                        <tr>
+                                            <td class="text-truncate"><i class="la la-dot-circle-o warning font-medium-1 mr-1"></i> Pending</td>
+                                            <td class="text-truncate"><a href="#"><%=payment.time.date%>/<%=payment.time.month%>/<%=payment.time.year%></a></td>
+                                            <td class="text-truncate p-1"><%=payment.amount%></td>
+                                            <td class="text-truncate">
+                                                <a href="#" class="mb-0 btn-sm btn btn-outline-warning round"><%=payment.type%></a>
+                                            </td>
+                                            <td><%=payment.from%></td>
+                                            <td><%=payment.trnxId%></td>
+                                        </tr>
+                                     
+       <%     }else{  %>
+
+                                      <%     if(payment.status == 'success'){  %>
+                                    <%         if(payment.type == 'Credit'){  %>
+                                          <%     //Credit Green trnx %>
+                                        <tr>
+                                            <td class="text-truncate"><i class="la la-dot-circle-o success font-medium-1 mr-1"></i> Success</td>
+                                            <td class="text-truncate"><a href="#"><%=payment.time.date%>/<%=payment.time.month%>/<%=payment.time.year%></a></td>
+                                            <td class="text-truncate p-1"><%=payment.amount%></td>
+                                            <td class="text-truncate">
+                                                <a href="#" class="mb-0 btn-sm btn btn-outline-success round"><%=payment.type%></a>
+                                            </td>
+                                            <td><%=payment.from%></td>
+                                            <td><%=payment.trnxId%></td>
+                                        </tr>
+        <%           }else{  %>
+                                    <%        //Debit Red trnx  %>
+                                        <tr>
+                                            <td class="text-truncate"><i class="la la-dot-circle-o success font-medium-1 mr-1"></i> Success</td>
+                                            <td class="text-truncate"><a href="#"><%=payment.time.date%>/<%=payment.time.month%>/<%=payment.time.year%></a></td>
+                                            <td class="text-truncate p-1"><%=payment.amount%></td>
+                                            <td class="text-truncate">
+                                                <a href="#" class="mb-0 btn-sm btn btn-outline-warning round"><%=payment.type%></a>
+                                            </td>
+                                            <td><%=payment.from%></td>
+                                            <td><%=payment.trnxId%></td>
+                                        </tr>
+
+              <%       }  %>
+                                    <%       }else{  %>
+                                    <%     //failed Trnx  %>
+                                        <tr>
+                                            <td class="text-truncate"><i class="la la-dot-circle-o danger font-medium-1 mr-1"></i> Failed</td>
+                                            <td class="text-truncate"><a href="#"><%=payment.time.date%>/<%=payment.time.month%>/<%=payment.time.year%></a></td>
+                                            <td class="text-truncate p-1"><%=payment.amount%></td>
+                                            <td class="text-truncate">
+                                                <a href="#" class="mb-0 btn-sm btn btn-outline-danger round"><%=payment.type%></a>
+                                            </td>
+                                            <td><%=payment.from%></td>
+                                            <td><%=payment.trnxId%></td>
+                                        </tr>
+
+                <%       }  %>
+                                    <%     }  %>
+                                  <%     });  %>
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <%    }else{  %>
+                
+                <br><br>
+                <div class="">
+                    <h6 class="mb-1 text-dark text-sm">No transactions found</h6>
+                </div>
+
+         <%    } %>
+      </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <footer class="footer footer-static footer-transparent">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block">Copyright  &copy; <script>
+          document.write(new Date().getFullYear())
+          </script>, All rights reserved. </span></p>
+    </footer>
+
+    <!-- BEGIN VENDOR JS-->
+    <script src="../assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN MODERN JS-->
+    <script src="../assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="../assets/js/core/app.js" type="text/javascript"></script>
+    <script src="../assets/js/response.js" type="text/javascript"></script>
+    <script src="../assets/js/request.js" type="text/javascript"></script>
+    <!-- END MODERN JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+  </body>
+</html>
