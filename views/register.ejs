@@ -72,8 +72,7 @@
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required="" autofocus="">
                                 <label for="confirmPassword">Re-enter password</label>
                             </fieldset>
-                            <%console.log(sponsor, 'Iwasrun')%>
-                            <%if(sponsor = true){%>
+                            <%if(sponsor == false){%>
                             <fieldset class="form-label-group">
                                 <input type="text" style="text-transform: uppercase;" class="form-control" oninput="sponsorAvailability()" id="sponsorID" value="<%=sponsorID%>" name="sponsorID" placeholder="Enter your Sponsor ID" required="" autofocus="">
                                 <label for="sponsorID">Sponsor ID</label>

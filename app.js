@@ -236,7 +236,6 @@ app.get("/", function(req, res){
 });
 
 app.get("/register", function(req, res){
-  console.log(req.session.sponsorID);
   
   if(req.session.sponsorID != undefined){
     const alert = "false";
@@ -452,7 +451,7 @@ app.get('/planDetails/:amount', async (req, res)=> {
       
     }
   }
-})
+});
 
 app.get("/log-out", function(req, res){
   req.session.destroy();
@@ -496,6 +495,8 @@ app.get("/admin", async function(req, res) {
     try {
       const foundAdmin = await Admin.findOne({ email: process.env.ADMIN });
       const foundUsers = await User.find({});
+      const foundSwitch = await Switch.find({});
+      const mode = foundSwitch[0];
       
       const total = foundUsers.length;
       const current = foundUsers.filter(activeUsers => activeUsers.status === 'Active');
@@ -505,6 +506,7 @@ app.get("/admin", async function(req, res) {
       res.render("admin", {
         total,
         currentUsers,
+        mode,
         pendingApproval: foundAdmin.payment.length,
         pendingWithdraw: foundAdmin.withdrawal.length,
         payment: foundAdmin.payment,
@@ -714,7 +716,61 @@ app.get('/api/manualTaskOverride', async (req, res) =>{
       
     }
   }
-})
+});
+
+app.get('/activeUsers', async (req, res)=>{
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      const activeUsers = await User.find({status: 'Active'});
+      res.render('users', {
+        activeUsers
+      })
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
+});
+
+app.get('/totalUsers', async (req, res)=>{
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      const activeUsers = await User.find({});
+      res.render('users', {
+        activeUsers
+      })
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
+});
+
+app.get('/viewUser/:email', async (req, res)=>{
+  if(!req.session.admin){
+     res.redirect('/adminLogin');
+  }else{
+    const email = req.params.email;
+    try {
+      const foundUser = await User.findOne({email:email});
+      if (!foundUser) {
+        return res.redirect('/admin');
+      }
+      if(foundUser){
+        req.session.user = { email: foundUser.email };
+        res.redirect("/dashboard");
+      }
+  
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
+});
 
 
 
@@ -748,7 +804,11 @@ app.post('/api/register', async (req, res) => {
       addition3: 0,
       balance: 0
     },
-    time: `${date}/${month}/${year}`,
+    time: {
+      date:date,
+      month:month,
+      year:year
+    },
     history: [],
     transaction: []
   });
@@ -2118,7 +2178,7 @@ app.post('/creditBalance', async (req, res)=>{
       console.log(err);
     }
   }
-})
+});
 
 
 
