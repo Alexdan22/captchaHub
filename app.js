@@ -786,7 +786,8 @@ app.get('/downline', async(req, res)=>{
       const foundUser = await User.findOne({email:req.session.user.email});
       const foundDownlines = await User.find({sponsorID: foundUser.userID});
       res.render('downlines', {
-        downline:foundDownlines
+        downline:foundDownlines,
+        status:foundUser.status
       })
     } catch (err) {
       console.log(err);
@@ -801,9 +802,11 @@ app.get('/downline/:sponsorID', async(req, res)=>{
   }else{
     const userID = req.params.sponsorID;
     try {
+      const foundUser = await User.findOne({email:req.session.user.email});
       const foundDownlines = await User.find({sponsorID: userID});
       res.render('downlines', {
-        downline:foundDownlines
+        downline:foundDownlines,
+        status:foundUser.status
       })
     } catch (err) {
       console.log(err);
