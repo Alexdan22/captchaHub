@@ -141,7 +141,12 @@ const userSchema = new mongoose.Schema({
   package: {
     stage: String,
     days: Number,
-    status: String
+    status: String,
+    time:{
+      date:Number,
+      month:Number,
+      year: Number
+    }
   },
 
   time: {
@@ -1019,7 +1024,12 @@ app.post('/planActivation', async (req, res) => {
             package: {
               stage:amount,
               days:150,
-              status: 'Active'
+              status: 'Active',
+              time:{
+                date:date,
+                month:month,
+                year: year
+              }
             } 
           } });
 
