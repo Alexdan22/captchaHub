@@ -535,6 +535,7 @@ app.get('/transaction', async (req, res) => {
           name: foundUser.username,
           tab: 'false',
           email: foundUser.email,
+          status: foundUser.status,
           transaction: foundUser.transaction,
           alert: 'nil'
         });
@@ -770,6 +771,40 @@ app.get('/viewUser/:email', async (req, res)=>{
         res.redirect("/dashboard");
       }
   
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
+});
+
+app.get('/downline', async(req, res)=>{
+  if(!req.session.user){
+    res.redirect('/');
+  }else{
+    try {
+      const foundUser = await User.findOne({email:req.session.user.email});
+      const foundDownlines = await User.find({sponsorID: foundUser.userID});
+      res.render('downlines', {
+        downline:foundDownlines
+      })
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
+});
+
+app.get('/downline/:sponsorID', async(req, res)=>{
+  if(!req.session.user){
+    res.redirect('/');
+  }else{
+    const userID = req.params.sponsorID;
+    try {
+      const foundDownlines = await User.find({sponsorID: userID});
+      res.render('downlines', {
+        downline:foundDownlines
+      })
     } catch (err) {
       console.log(err);
       
