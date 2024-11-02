@@ -742,9 +742,9 @@ app.get('/api/manualTaskOverride', async (req, res) =>{
               days:users.package.days,
               status: 'Active',
               time:{
-                date:users.package.date,
-                month:users.package.month,
-                year:users.package.year
+                date:users.package.time.date,
+                month:users.package.time.month,
+                year:users.package.time.year
               }
             } 
           } });
