@@ -85,84 +85,197 @@
         </div>
         <div class="content-detached content-left">
           <div class="content-body"><div id="wallet">
-    <!-- SILVER -->
-    <section class="card pull-up">
-        <div class="card-content">
-            <div class="card-body">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-md-6 col-12 py-1">
-                            <div class="media">
-                                <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
-                                <div class="media-body px-2">
-                                    <h5 class="mt-0 text-capitalize">SILVER</h5>
+            <%if(status == 'Active'){%>
+              <%if(package == '240'){%>
+                <!-- GOLD -->
+                <section class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-12 py-1">
+                                        <div class="media">
+                                            <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                            <div class="media-body px-2">
+                                                <h5 class="mt-0 text-capitalize">GOLD</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <h6>2000 rs</h6>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <a href="#"name='2000' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 col-12 py-1 text-center">
-                            <h6>240 rs</h6>
-                        </div>
-                        <div class="col-md-2 col-12 py-1 text-center">
-                            <a href="#"name='240' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
-                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/ SILVER -->
-    <!-- GOLD -->
-    <section class="card pull-up">
-        <div class="card-content">
-            <div class="card-body">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-md-6 col-12 py-1">
-                            <div class="media">
-                                <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
-                                <div class="media-body px-2">
-                                    <h5 class="mt-0 text-capitalize">GOLD</h5>
+                </section>
+                <!--/ GOLD -->
+                <!-- DIAMOND -->
+                <section class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-12 py-1">
+                                        <div class="media">
+                                            <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                            <div class="media-body px-2">
+                                                <h5 class="mt-0 text-capitalize">DIAMOND</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <h6>7500 rs</h6>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <a href="#"name='7500' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 col-12 py-1 text-center">
-                            <h6>2000 rs</h6>
-                        </div>
-                        <div class="col-md-2 col-12 py-1 text-center">
-                            <a href="#"name='2000' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
-                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/ GOLD -->
-    <!-- DIAMOND -->
-    <section class="card pull-up">
-        <div class="card-content">
-            <div class="card-body">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-md-6 col-12 py-1">
-                            <div class="media">
-                                <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
-                                <div class="media-body px-2">
-                                    <h5 class="mt-0 text-capitalize">DIAMOND</h5>
+                </section>
+                <!--/ DIAMOND -->
+              <%}%>
+              <%if(package == '2000'){%>
+                <!-- DIAMOND -->
+                <section class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-12 py-1">
+                                        <div class="media">
+                                            <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                            <div class="media-body px-2">
+                                                <h5 class="mt-0 text-capitalize">DIAMOND</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <h6>7500 rs</h6>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <a href="#"name='7500' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 col-12 py-1 text-center">
-                            <h6>7500 rs</h6>
-                        </div>
-                        <div class="col-md-2 col-12 py-1 text-center">
-                            <a href="#"name='7500' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                    </div>
+                </section>
+                <!--/ DIAMOND -->
+              <%}%>
+              <%if(package == '7500'){%>
+                <!-- DIAMOND -->
+                <section class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-6 col-12 py-1">
+                                        <div class="media">
+                                            <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                            <div class="media-body px-2">
+                                                <h5 class="mt-0 text-capitalize">DIAMOND</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <h6>7500 rs</h6>
+                                    </div>
+                                    <div class="col-md-2 col-12 py-1 text-center">
+                                        <a href="#"name='7500' class="line-height-3">Active</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/ DIAMOND -->
+                </section>
+                <!--/ DIAMOND -->
+              <%}%>
+            <%}else{%>
+              <!-- SILVER -->
+              <section class="card pull-up">
+                  <div class="card-content">
+                      <div class="card-body">
+                          <div class="col-12">
+                              <div class="row">
+                                  <div class="col-md-6 col-12 py-1">
+                                      <div class="media">
+                                          <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                          <div class="media-body px-2">
+                                              <h5 class="mt-0 text-capitalize">SILVER</h5>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-2 col-12 py-1 text-center">
+                                      <h6>240 rs</h6>
+                                  </div>
+                                  <div class="col-md-2 col-12 py-1 text-center">
+                                      <a href="#"name='240' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+              <!--/ SILVER -->
+              <!-- GOLD -->
+              <section class="card pull-up">
+                  <div class="card-content">
+                      <div class="card-body">
+                          <div class="col-12">
+                              <div class="row">
+                                  <div class="col-md-6 col-12 py-1">
+                                      <div class="media">
+                                          <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                          <div class="media-body px-2">
+                                              <h5 class="mt-0 text-capitalize">GOLD</h5>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-2 col-12 py-1 text-center">
+                                      <h6>2000 rs</h6>
+                                  </div>
+                                  <div class="col-md-2 col-12 py-1 text-center">
+                                      <a href="#"name='2000' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+              <!--/ GOLD -->
+              <!-- DIAMOND -->
+              <section class="card pull-up">
+                  <div class="card-content">
+                      <div class="card-body">
+                          <div class="col-12">
+                              <div class="row">
+                                  <div class="col-md-6 col-12 py-1">
+                                      <div class="media">
+                                          <img src="../assets/images/icons/hyperlink.png" alt=""  class="" style="width: 15%; height: auto;">
+                                          <div class="media-body px-2">
+                                              <h5 class="mt-0 text-capitalize">DIAMOND</h5>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-2 col-12 py-1 text-center">
+                                      <h6>7500 rs</h6>
+                                  </div>
+                                  <div class="col-md-2 col-12 py-1 text-center">
+                                      <a href="#"name='7500' onclick="paymentGateway(event)" class="line-height-3">Deposit</a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+              <!--/ DIAMOND -->
+            <%}%>
 </div>
           </div>
         </div>

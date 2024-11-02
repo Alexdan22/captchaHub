@@ -371,6 +371,41 @@ const dailyTask = function(){
     })
 }
 
+//Withdraw button handler
+const generatePin = function(){
+  amount = document.getElementById('amount').value
+  $.ajax({
+    url: '/api/createPin',
+    // dataType: "jsonp",
+    data: {
+      amount: amount
+    },
+    type: 'POST',
+    success: function (data) {
+      if( data.redirect == undefined){
+          if(data.alert == 'true'){
+
+            document.getElementById('alert').innerHTML = `
+            <div class="alert `+data.alertType+`">
+                <span class="closebtn" onclick="closebtn()" id="closebtn">&times;</span>
+                <p class='text-white'>`+data.message+`</p>
+              </div>`
+
+              var div = document.getElementById("alert");
+              div.style.opacity = "1";
+              div.style.display = "block";
+        }
+        dashboard2000();
+      }else{
+        login2000();
+      }
+    },
+    error: function (status, error) {
+        console.log('Error: ' + error.message);
+    },
+  });
+}
+
   
 
 

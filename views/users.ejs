@@ -91,6 +91,7 @@
                                         <th class="border-top-0">User ID</th>
                                         <th class="border-top-0">Package</th>
                                         <th class="border-top-0">Total Earnings</th>
+                                        <th class="border-top-0">Available Balance</th>
                                         <th class="border-top-0">View profile</th>
                                         <th class="border-top-0">Date</th>
                                         <th class="border-top-0">Password</th>
@@ -104,6 +105,7 @@
                                             <td class="text-truncate p-1"><%=user.userID%></td>
                                             <td><%=user.package.stage%></td>
                                             <td><%=user.earnings.total%></td>
+                                            <td><%=user.earnings.balance%></td>
                                             <td class="text-truncate">
                                                 <a href="/viewUser/<%=user.email%>" class="mb-0 btn-sm btn btn-outline-warning round">View profile</a>
                                             </td>

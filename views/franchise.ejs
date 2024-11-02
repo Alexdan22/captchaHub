@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="CryptoDash admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, CryptoDash Cryptocurrency Dashboard Template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="ThemeSelection">
+    <title>Dashboard - Captcha Hub</title>
+    <link rel="apple-touch-icon" href="../assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i|Comfortaa:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+    crossorigin="anonymous" />
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist-plugin-tooltip.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/app.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/core/menu/menu-types/vertical-compact-menu.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/timeline.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/dashboard-ico.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <!-- END Custom CSS-->
+  </head>
+  <body class="vertical-layout vertical-compact-menu 2-columns   menu-expanded fixed-navbar" data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+
+    <!-- fixed-top-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-light navbar-bg-color">
+      <div class="navbar-wrapper">
+        <div class="navbar-header d-md-none">
+          <ul class="nav navbar-nav flex-row">
+            <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+            <li class="nav-item d-md-none"><a class="navbar-brand" href="/dashboard"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <div class="main-menu menu-fixed menu-dark menu-bg-default rounded menu-accordion menu-shadow">
+      <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/dashboard"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+          <li class="active"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+          </li>
+          <li class=" nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
+          </li>
+          <%if(status == 'Active'){%>
+            <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Upgrade</span></a>
+          <%}else{%>
+            <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Join today</span></a>
+          <%}%>
+          </li>
+          <li class=" nav-item"><a href="/downline"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Downline</span></a>
+          </li>
+          <li class=" nav-item"><a href="/transaction"><i class="icon-shuffle"></i><span class="menu-title" data-i18n="">Transactions</span></a>
+          </li>
+          <li class=" nav-item mt-3"><a href="/log-out"><span class="menu-title" data-i18n="">Log out</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="app-content content">
+      <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+<!--Overview -->
+<div class="row">
+    <div class="col-md-8 col-12">
+        <h6 class="my-2">Franchise</h6>
+        <div class="card pull-up">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <p><strong>Your balance:</strong></p>
+                                <h1 class="availableBalance"><%=balance%></h1>
+                            </div>
+                            <div class="col-md-4 col-12 text-center text-md-right">
+                                <button type="button"data-toggle="modal" data-target="#generatePinTab" class="btn-gradient-primary mt-2">Generate PIN <i class="la la-angle-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<h6 class="my-2">PIN Rewards</h6>
+<div class="card">
+    <div class="card-content collapse show">
+        <div class="card-body">
+            <div class="font-small-3 clearfix">
+                <span class="float-left">For SILVER PIN</span>
+            </div>
+            <%const progressBar1 = franchise.silver*10;%>
+            <div class="progress progress-sm my-1 box-shadow-2">
+                <div class="progress-bar bg-warning" role="progressbar"  id="progressBar1" aria-valuenow="<%=progressBar1%>" aria-valuemin="0" aria-valuemax="120"></div>
+            </div>
+            <div class="font-small-3 clearfix">
+                <span class="float-right text-right">Completed  <br> <strong><%=franchise.silver%></strong></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-content collapse show">
+        <div class="card-body">
+            <div class="font-small-3 clearfix">
+                <span class="float-left">For GOLD PIN</span>
+            </div>
+            <%const progressBar2 = franchise.gold*10;%>
+            <div class="progress progress-sm my-1 box-shadow-2">
+                <div class="progress-bar bg-warning" role="progressbar"  id="progressBar2" aria-valuenow="<%=progressBar2%>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="font-small-3 clearfix">
+                <span class="float-right text-right">Completed  <br> <strong><%=franchise.gold%></strong></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-content collapse show">
+        <div class="card-body">
+            <div class="font-small-3 clearfix">
+                <span class="float-left">For DIAMOND PIN</span>
+            </div>
+            <%const progressBar3 = franchise.diamond*10;%>
+            <div class="progress progress-sm my-1 box-shadow-2">
+                <div class="progress-bar bg-warning" role="progressbar"  id="progressBar3" aria-valuenow="<%=progressBar3%>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="font-small-3 clearfix">
+                <span class="float-right text-right">Completed  <br> <strong><%=franchise.diamond%></strong></span>
+            </div>
+        </div>
+    </div>
+</div>
+                            <%if(pin.length == 0){%>
+                            <%}else{%>
+                                <div class="row">
+                                    <div id="recent-transactions" class="col-12">
+                                        <h6 class="my-2">Available PIN</h6>
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="table-responsive">
+                                                    <table id="recent-orders" class="table table-hover table-xl mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="border-top-0">Value</th>
+                                                                <th class="border-top-0">Package</th>
+                                                                <th class="border-top-0">PIN Details</th>
+                                                                <th class="border-top-0"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                <%pin.forEach(function(current){%>
+                                    <%if(current.status == 'Active'){%>
+                                        <%if(current.amount == 240){%>
+
+                                        <tr>
+                                            <td class="text-truncate"><%=current.amount%></td>
+                                            <td class="text-truncate"><a href="#">SILVER</a></td>
+                                            <td class="text-truncate p-1"><%=current.pin%></td>
+                                            <td class="text-truncate">
+                                                <button type="button"data-toggle="modal" data-target="#<%=current.pin%>" class="mb-0 btn-sm btn btn-outline-success round">Use</button>
+                                            </td>
+                                        </tr>  
+                                        <div class="modal fade" id="<%=current.pin%>" tabindex="-1" role="dialog" aria-labelledby="<%=current.pin%>" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="purchaseModalLabel">Activate ID</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <form class="form form-horizontal my-2 mx-2" method="post" action="/activateUser">
+                                                                    <div class="form-body">
+                                                                        <div class="row">
+                                                                            <div class="col-12 col-md-5">
+                                                                                <div class="col-12">
+                                                                                    <fieldset class="form-label-group">
+                                                                                        <input type="text" class="form-control" value="<%=current.pin%>" disabled required="" autofocus="">
+                                                                                        <input type="text" class="form-control" value="<%=current.pin%>" hidden name="pin" id="pin"  required="" autofocus="">
+                                                                                        <label for="pin">PIN Details</label>
+                                                                                    </fieldset>
+                                                                                    <fieldset class="form-label-group">
+                                                                                        <input type="text" class="form-control" name="userID" id="userID"  required="" autofocus="">
+                                                                                        <label for="userID">Enter UserID</label>
+                                                                                    </fieldset>
+                                                                                </div>
+                                                                                <div class="col-md-4 col-12 text-center text-md-right">
+                                                                                    <button type="submit" class="btn-gradient-secondary mt-2">Confirm <i class="la la-angle-right"></i></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                                <div id="alert"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <%}%>
+                                        <%if(current.amount == 2000){%>
+                                           
+                                        <tr>
+                                            <td class="text-truncate"><%=current.amount%></td>
+                                            <td class="text-truncate"><a href="#">GOLD</a></td>
+                                            <td class="text-truncate p-1"><%=current.pin%></td>
+                                            <td class="text-truncate">
+                                                <button type="button"data-toggle="modal" data-target="#<%=current.pin%>" class="mb-0 btn-sm btn btn-outline-success round">Use</button>
+                                            </td>
+                                        </tr>  
+                                        <div class="modal fade" id="<%=current.pin%>" tabindex="-1" role="dialog" aria-labelledby="<%=current.pin%>" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="purchaseModalLabel">Activate ID</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <form class="form form-horizontal my-2 mx-2" method="post" action="/activateUser">
+                                                                    <div class="form-body">
+                                                                        <div class="row">
+                                                                            <div class="col-12 col-md-5">
+                                                                                <div class="col-12">
+                                                                                    <fieldset class="form-label-group">
+                                                                                        <input type="text" class="form-control" value="<%=current.pin%>" disabled required="" autofocus="">
+                                                                                        <input type="text" class="form-control" value="<%=current.pin%>" hidden name="pin" id="pin"  required="" autofocus="">
+                                                                                        <label for="pin">PIN Details</label>
+                                                                                    </fieldset>
+                                                                                    <fieldset class="form-label-group">
+                                                                                        <input type="text" class="form-control" name="userID" id="userID"  required="" autofocus="">
+                                                                                        <label for="userID">Enter UserID</label>
+                                                                                    </fieldset>
+                                                                                </div>
+                                                                                <div class="col-md-4 col-12 text-center text-md-right">
+                                                                                    <button type="submit" class="btn-gradient-secondary mt-2">Confirm <i class="la la-angle-right"></i></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                                <div id="alert"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>   
+                                        <%}%>
+                                        <%if(current.amount == 7500){%>
+                                            
+                                        <tr>
+                                            <td class="text-truncate"><%=current.amount%></td>
+                                            <td class="text-truncate"><a href="#">DIAMOND</a></td>
+                                            <td class="text-truncate p-1"><%=current.pin%></td>
+                                            <td class="text-truncate">
+                                                <button type="button"data-toggle="modal" data-target="#<%=current.pin%>" class="mb-0 btn-sm btn btn-outline-success round">Use</button>
+                                            </td>
+                                        </tr>  
+                                        <div class="modal fade" id="<%=current.pin%>" tabindex="-1" role="dialog" aria-labelledby="<%=current.pin%>" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="purchaseModalLabel">Activate ID</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="card-content">
+                                                            <div class="card-body">
+                                                                <form class="form form-horizontal my-2 mx-2" method="post" action="/activateUser">
+                                                                    <div class="form-body">
+                                                                        <div class="row">
+                                                                            <div class="col-12 col-md-5">
+                                                                                <div class="col-12">
+                                                                                    <fieldset class="form-label-group">
+                                                                                        <input type="text" class="form-control" value="<%=current.pin%>" disabled required="" autofocus="">
+                                                                                        <input type="text" class="form-control" value="<%=current.pin%>" hidden name="pin" id="pin"  required="" autofocus="">
+                                                                                        <label for="pin">PIN Details</label>
+                                                                                    </fieldset>
+                                                                                    <fieldset class="form-label-group">
+                                                                                        <input type="text" class="form-control" name="userID" id="userID"  required="" autofocus="">
+                                                                                        <label for="userID">Enter UserID</label>
+                                                                                    </fieldset>
+                                                                                </div>
+                                                                                <div class="col-md-4 col-12 text-center text-md-right">
+                                                                                    <button type="submit" class="btn-gradient-secondary mt-2">Confirm <i class="la la-angle-right"></i></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                                <div id="alert"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <%}%>
+                                    <%}%>
+                                <%})%>  
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <%}%>
+
+
+                            <%if(pin.length == 0){%>
+                                
+                                <%}else{%>
+                                    <div class="row">
+                                    <div id="recent-transactions" class="col-12">
+                                        <h6 class="my-2">History</h6>
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="table-responsive">
+                                                    <table id="recent-orders" class="table table-hover table-xl mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="border-top-0">PIN Details</th>
+                                                                <th class="border-top-0">Value</th>
+                                                                <th class="border-top-0">Username</th>
+                                                                <th class="border-top-0">Activated</th>
+                                                                <th class="border-top-0">Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                    <%pin.forEach(function(current){%>
+                                        <%if(current.status == 'Redeemed'){%>
+                                            <tr>
+                                                <td class="text-truncate"><%=current.pin%></td>
+                                                <td class="text-truncate"><%=current.amount%></td>
+                                                <td class="text-truncate"><%=current.redemption.username%></td>
+                                                <td class="text-truncate"><a href="#"><%=current.redemption.userID%></a></td>
+                                                <td class="text-truncate">
+                                                    <a href="#" class="mb-0 btn-sm btn btn-outline-success round"><%=current.redemption.time.date%>-<%=current.redemption.time.month%>-<%=current.redemption.time.year%></a>
+                                                </td>
+                                            </tr>
+                                      <%}%>
+                                    <%})%>    
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                              <%}%>
+
+<!--/ Account Balance -->
+<div class="modal fade" id="generatePinTab" tabindex="-1" role="dialog" aria-labelledby="generatePinTab" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="purchaseModalLabel">Generate PIN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-8 col-12 text-center">
+                                    <p>Available balance: <strong class="availableBalance"><%=balance%></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="form form-horizontal my-2 mx-2">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-12 col-md-5">
+                                <div class="col-md-1 col-12">
+                                    <select name="amount" id="amount" class="custom-select">
+                                        <option value="240" selected>SILVER - 240</option>
+                                        <option value="2000">GOLD - 2000</option>
+                                        <option value="7500">DIAMOND - 7500</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 col-12 text-center text-md-right">
+                                    <button type="button" onclick="generatePin()" class="btn-gradient-secondary mt-2">Confirm <i class="la la-angle-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <h6 class="mx-1">Kindly Note</h6>
+                <ol>
+                    <li>This process is irreversible, Use with consideration.</li>
+                    <li>The Generated PIN does not expire before use.</li>
+                    <li>Get 1 free PIN on every same stage 12 generation.</li>
+                </ol>
+                <div id="alert"></div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+      </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+    <footer class="footer footer-static footer-transparent">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block">Copyright  &copy; <script>
+          document.write(new Date().getFullYear())
+          </script>, All rights reserved. </span></p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const progressBarElement1 = document.getElementById('progressBar1');
+            const width1 = '<%= progressBar1 %>';
+            progressBarElement1.style.width = (parseFloat(width1) * 0.8333) + '%';
+    
+            const progressBarElement2 = document.getElementById('progressBar2');
+            const width2 = '<%= progressBar2 %>';
+            progressBarElement2.style.width = (parseFloat(width2) * 0.8333) + '%';
+    
+            const progressBarElement3 = document.getElementById('progressBar3');
+            const width3 = '<%= progressBar3 %>';
+            progressBarElement3.style.width = (parseFloat(width3) * 0.8333) + '%';
+        });
+    </script>
+    
+
+    <!-- BEGIN VENDOR JS-->
+    <script src="../assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="../assets/vendors/js/timeline/horizontal-timeline.js" type="text/javascript"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN MODERN JS-->
+    <script src="../assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="../assets/js/core/app.js" type="text/javascript"></script>
+    <script src="../assets/js/response.js" type="text/javascript"></script>
+    <script src="../assets/js/request.js" type="text/javascript"></script>
+    <!-- END MODERN JS-->
+  </body>
+</html>

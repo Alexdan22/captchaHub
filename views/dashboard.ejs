@@ -212,15 +212,27 @@
                     </div>
                     <%const progressBar = currentCount*10;%>
                     <%const pending = 10-currentCount;%>
-                    <div class="progress progress-sm my-1 box-shadow-2">
-                        <div class="progress-bar bg-warning" role="progressbar"  id="progressBar" aria-valuenow="<%=progressBar%>" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="font-small-3 clearfix">
-                        <span class="float-right text-right">Pending  <br> <strong><%=pending%></strong></span>
-                    </div>
-                    <div>
-                        <button disabled class="btn btn-primary mt-1">Generate PIN</button>
-                    </div>
+                    <%if(currentCount >= 10){%>
+                        <div class="progress progress-sm my-1 box-shadow-2">
+                            <div class="progress-bar bg-warning" role="progressbar"  id="progressBar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="font-small-3 clearfix">
+                            <span class="float-right text-right">Pending  <br> <strong>0</strong></span>
+                        </div>
+                        <div>
+                            <a href="/franchise" class="btn btn-primary mt-1">Generate PIN</a>
+                        </div>
+                    <%}else{%>
+                        <div class="progress progress-sm my-1 box-shadow-2">
+                            <div class="progress-bar bg-warning" role="progressbar"  id="progressBar" aria-valuenow="<%=progressBar%>" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="font-small-3 clearfix">
+                            <span class="float-right text-right">Pending  <br> <strong><%=pending%></strong></span>
+                        </div>
+                        <div>
+                            <button disabled class="btn btn-primary mt-1">Generate PIN</button>
+                        </div>
+                    <%}%>
                 </div>
             </div>
         </div>

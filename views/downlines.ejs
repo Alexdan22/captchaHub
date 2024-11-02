@@ -48,7 +48,7 @@
           <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             <li class=" nav-item"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
             </li>
-            <li class="nav-item"><a href=""><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
+            <li class="nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
             </li>
             <%if(status == 'Active'){%>
               <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Upgrade</span></a>
@@ -116,7 +116,7 @@
                                         </tr>
                         <%}else{%>
                                         <tr>
-                                            <td class="text-truncate"><i class="la la-dot-circle-o success font-medium-1 mr-1"></i> <%=user.username%></td>
+                                            <td class="text-truncate"><i class="la la-dot-circle-o warning font-medium-1 mr-1"></i> <%=user.username%></td>
                                             <td class="text-truncate p-1"><%=user.userID%></td>
                                             <td><%=user.status%></td>
                                             <td>Nil</td>
