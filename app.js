@@ -858,7 +858,7 @@ app.get('/franchise', async (req, res)=>{
       const foundDownline = await User.find({sponsorID:foundUser.userID});
       const foundPin = await Pin.find({email:foundUser.email});
       
-      if(foundDownline.length <= 10){
+      if(foundDownline.length >= 10){
         res.render('franchise', {
           status: foundUser.status,
           email: foundUser.email,
