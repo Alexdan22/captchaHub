@@ -360,10 +360,10 @@ const dailyTask = function(){
         url: '/api/dailyTask',
         type: 'GET',
         success:function(data){
-            if(data.redirect == undefined){
-                dashboard2000()
-            }else{
+            if(data.redirect == true){
                 login2000()
+            }else{
+              dashboard2000()
             }
         },
         error:function(error){

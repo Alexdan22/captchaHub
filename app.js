@@ -716,7 +716,12 @@ app.get('/api/dailyTask', async (req, res) =>{
           package: {
             stage:foundUser.package.stage,
             days:foundUser.package.days - 1,
-            status: 'Cooldown'
+            status: 'Cooldown',
+            time:{
+              date:users.package.time.date,
+              month:users.package.time.month,
+              year:users.package.time.year
+            }
           } 
         } });
       }
@@ -876,6 +881,7 @@ app.get('/franchise', async (req, res)=>{
     }
   }
 });
+
 
 
 
