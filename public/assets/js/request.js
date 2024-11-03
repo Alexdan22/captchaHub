@@ -313,13 +313,13 @@ const paymentGateway = function(event){
                                       <form class="form-horizontal form-referral-link row mt-2" action="">
                                           <div class="col-12">
                                               <fieldset class="form-label-group">
-                                                  <input type="text" class="form-control" name="amount" id="amount" disabled value="`+data.amount+`"  required="" autofocus="">
+                                                  <input type="number" class="form-control" name="amount" id="amount" disabled value="`+data.amount+`"  required="" autofocus="">
                                                   <label for="amount">Plan amount</label>
                                               </fieldset>
                                           </div>
                                           <div class="col-12">
                                               <fieldset class="form-label-group">
-                                                  <input type="text" class="form-control" name="trnxId" id="trnxId"  required="" autofocus="">
+                                                  <input type="number" class="form-control" name="trnxId" id="trnxId"  required="" autofocus="">
                                                   <label for="trnxId">UTR or TRN number</label>
                                               </fieldset>
                                           </div>
