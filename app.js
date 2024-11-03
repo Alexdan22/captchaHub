@@ -1845,73 +1845,80 @@ app.post("/api/paymentVerification", async function(req, res) {
       const message = "Kindly fill all the given details";
       res.status(200).send({ alertType, alert, message });
     } else {
-      try {
-        const duplicate = await Payment.findOne({ trnxId: req.body.trnxId });
-        if (duplicate) {
-          const alertType = "warning";
-          const alert = "true";
-          const message = "Transaction already exists";
-          res.status(200).send({ alertType, alert, message });
-        } else {
-          const foundUser = await User.findOne({ email: req.session.user.email });
-          if (foundUser) {
-            const foundAdmin = await Admin.findOne({ email: process.env.ADMIN });
-            const newPayment = {
-              trnxId: req.body.trnxId,
-              email: foundUser.email,
-              amount: req.body.amount,
-              username: foundUser.username,
-              time: {
-                date: date,
-                month: month,
-                year: year,
-                minutes: minutes,
-                hour: hour
-              }
-            };
-
-            if (!foundAdmin) {
-              const admin = new Admin({
-                email: process.env.ADMIN,
-                payment: [],
-                withdrawal: []
-              });
-              await admin.save();
-
-              await Admin.updateOne({ email: process.env.ADMIN }, { $set: { payment: [newPayment] } });
-            } else {
-              let pendingPayments = foundAdmin.payment;
-              pendingPayments.push(newPayment);
-              await Admin.updateOne({ email: process.env.ADMIN }, { $set: { payment: pendingPayments } });
-            }
-
-            const newTransaction = {
-              type: 'Credit',
-              from: 'ID activation',
-              amount: req.body.amount,
-              status: 'Pending',
-              time: {
-                date: date,
-                month: month,
-                year: year
-              },
-              trnxId: req.body.trnxId
-            };
-            let history = foundUser.transaction;
-            history.push(newTransaction);
-            await User.updateOne({ email: foundUser.email }, { $set: { transaction: history } });
-
-            const newPaymentSchema = new Payment(newPayment);
-            await newPaymentSchema.save();
-
-            const alertType = "success";
+      if(String(req.body.trnxId).length != 12){
+        const alertType = "warning";
+        const alert = "true";
+        const message = "Enter valid UTR number";
+        res.status(200).send({ alertType, alert, message });
+      }else{
+        try {
+          const duplicate = await Payment.findOne({ trnxId: req.body.trnxId });
+          if (duplicate) {
+            const alertType = "warning";
             const alert = "true";
-            const message = "Payment details submitted.";
+            const message = "Transaction already exists";
             res.status(200).send({ alertType, alert, message });
+          } else {
+            const foundUser = await User.findOne({ email: req.session.user.email });
+            if (foundUser) {
+              const foundAdmin = await Admin.findOne({ email: process.env.ADMIN });
+              const newPayment = {
+                trnxId: req.body.trnxId,
+                email: foundUser.email,
+                amount: req.body.amount,
+                username: foundUser.username,
+                time: {
+                  date: date,
+                  month: month,
+                  year: year,
+                  minutes: minutes,
+                  hour: hour
+                }
+              };
+  
+              if (!foundAdmin) {
+                const admin = new Admin({
+                  email: process.env.ADMIN,
+                  payment: [],
+                  withdrawal: []
+                });
+                await admin.save();
+  
+                await Admin.updateOne({ email: process.env.ADMIN }, { $set: { payment: [newPayment] } });
+              } else {
+                let pendingPayments = foundAdmin.payment;
+                pendingPayments.push(newPayment);
+                await Admin.updateOne({ email: process.env.ADMIN }, { $set: { payment: pendingPayments } });
+              }
+  
+              const newTransaction = {
+                type: 'Credit',
+                from: 'ID activation',
+                amount: req.body.amount,
+                status: 'Pending',
+                time: {
+                  date: date,
+                  month: month,
+                  year: year
+                },
+                trnxId: req.body.trnxId
+              };
+              let history = foundUser.transaction;
+              history.push(newTransaction);
+              await User.updateOne({ email: foundUser.email }, { $set: { transaction: history } });
+  
+              const newPaymentSchema = new Payment(newPayment);
+              await newPaymentSchema.save();
+  
+              const alertType = "success";
+              const alert = "true";
+              const message = "Payment details submitted.";
+              res.status(200).send({ alertType, alert, message });
+            }
           }
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
       }
     }
   }
