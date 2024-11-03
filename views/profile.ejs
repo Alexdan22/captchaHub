@@ -105,6 +105,17 @@
                                         <p class="text-bold-700 text-uppercase mb-0">Email</p>
                                         <p class="mb-0"><%=email%></p>
                                     </div>
+                                    <%if(mobile == 0){%>
+                                        <div class="col-12 col-md-4">
+                                            <p class="text-bold-700 text-uppercase mb-0">Mobile number</p>
+                                            <p class="mb-0">Not provided</p>
+                                        </div>
+                                    <%}else{%>
+                                        <div class="col-12 col-md-4">
+                                            <p class="text-bold-700 text-uppercase mb-0">Mobile number</p>
+                                            <p class="mb-0">+91 <%=mobile%></p>
+                                        </div>
+                                    <%}%>
                                     <div class="col-12 col-md-4">
                                         <p class="text-bold-700 text-uppercase mb-0">User ID</p>
                                         <p class="mb-0"><%=userID%></p>

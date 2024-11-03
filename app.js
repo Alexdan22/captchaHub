@@ -113,6 +113,11 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
+  mobile: {
+    type: Number,
+    required: true
+  },
+
   userID: {
     type: String,
     required: true
@@ -257,26 +262,20 @@ app.get("/", function(req, res){
   res.render("login", {alert});
 });
 
-app.get("/register", function(req, res){
-  
-  if(req.session.sponsorID != undefined){
-    const alert = "false";
-    const sponsor = 'true';
-    const sponsorID = req.session.sponsorID;
-    res.render("register", {
-      alert,
-      sponsor,
-      sponsorID
-    });
-  }else {
-    const alert = "false";
-    const sponsor = "false"
-    res.render("register", {
-      alert,
-      sponsor
-    });
-  }
+app.get("/register", function(req, res) {
+  const sponsorID = req.session.sponsorID || null;
+  const sponsor = sponsorID ? 'true' : 'false';
+  const alert = "false";
+
+  res.render("register", {
+    alert,
+    sponsor,
+    sponsorID
+  });
 });
+
+
+
 
 app.get('/updateSwitch', async (req, res)=>{
   if(!req.session.admin){
@@ -387,6 +386,7 @@ app.get("/profile", async (req, res) =>{
       username,
       email,
       status,
+      mobile,
       userID
     } = foundUser;
 
@@ -398,10 +398,10 @@ app.get("/profile", async (req, res) =>{
       if(!foundSponsor){
         //With no Registered Sponsor ID
         
-        res.render('profile', {username, email, userID,status,bank,  sponsorID:foundUser.sponsorID});
+        res.render('profile', {username, email, userID,status, mobile, bank,  sponsorID:foundUser.sponsorID});
       }else{
         //With registered sponsor ID
-          res.render('profile', {username, email, userID,status,bank, sponsorID:foundSponsor.username});
+          res.render('profile', {username, email, userID,status, mobile, bank, sponsorID:foundSponsor.username});
       }
   
     }else{
@@ -410,10 +410,10 @@ app.get("/profile", async (req, res) =>{
       if(!foundSponsor){
         //With no Registered Sponsor ID
         
-        res.render('profile', {username, email, userID,status,bank, bankDetails:foundUser.bankDetails,  sponsorID:foundUser.sponsorID});
+        res.render('profile', {username, email, userID,status, mobile, bank, bankDetails:foundUser.bankDetails,  sponsorID:foundUser.sponsorID});
       }else{
         //With registered sponsor ID
-          res.render('profile', {username, email, userID,status,bank, bankDetails:foundUser.bankDetails, sponsorID:foundSponsor.username});
+          res.render('profile', {username, email, userID,status, mobile, bank, bankDetails:foundUser.bankDetails, sponsorID:foundSponsor.username});
       }
   
     }
@@ -893,6 +893,7 @@ app.post('/api/register', async (req, res) => {
   const newUser = new User({
     username: req.body.username,
     email: req.body.email,
+    mobile: Number(req.body.mobile),
     password: req.body.password,
     sponsorID: req.body.sponsorID,
     userID: userID,
@@ -937,22 +938,35 @@ app.post('/api/register', async (req, res) => {
         alert: "true",
         message: "The Email is already registered, Kindly login"
       });
+    }else{
+      if (req.body.password !== req.body.confirmPassword) {
+        return res.status(200).send({
+          alertType: "warning",
+          alert: "true",
+          message: "Password did not match"
+        });
+      }else{
+        
+        if(String(req.body.mobile).length != 10){
+          return res.status(200).send({
+            alertType: "warning",
+            alert: "true",
+            message: "Invalid mobile number"
+          });
+        }else{
+          await newUser.save();
+          res.status(200).send({
+            alertType: "success",
+            alert: "true",
+            message: "Successfully created your Account"
+          });
+        }
+      }
     }
 
-    if (req.body.password !== req.body.confirmPassword) {
-      return res.status(200).send({
-        alertType: "warning",
-        alert: "true",
-        message: "Password did not match"
-      });
-    }
+    
 
-    await newUser.save();
-    res.status(200).send({
-      alertType: "success",
-      alert: "true",
-      message: "Successfully created your Account"
-    });
+    
 
   } catch (err) {
     console.log(err);
