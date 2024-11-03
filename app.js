@@ -718,9 +718,9 @@ app.get('/api/dailyTask', async (req, res) =>{
             days:foundUser.package.days - 1,
             status: 'Cooldown',
             time:{
-              date:users.package.time.date,
-              month:users.package.time.month,
-              year:users.package.time.year
+              date:foundUser.package.time.date,
+              month:foundUser.package.time.month,
+              year:foundUser.package.time.year
             }
           } 
         } });
