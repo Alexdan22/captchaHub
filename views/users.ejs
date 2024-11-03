@@ -118,8 +118,10 @@
                                         <tr>
                                             <td class="text-truncate"><i class="la la-dot-circle-o warning font-medium-1 mr-1"></i> <%=user.email%></td>
                                             <td class="text-truncate p-1"><%=user.userID%></td>
+                                            <td class="text-truncate p-1"><%=user.sponsorID%></td>
                                             <td>Nil</td>
                                             <td><%=user.earnings.total%></td>
+                                            <td><%=user.earnings.balance%></td>
                                             <td class="text-truncate">
                                                 <a href="/viewUser/<%=user.email%>" class="mb-0 btn-sm btn btn-outline-warning round">View profile</a>
                                             </td>
