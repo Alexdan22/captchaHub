@@ -200,6 +200,19 @@ const adminSchema = new mongoose.Schema({
       },
     }
   ],
+  autobot:[
+    {
+      time:{
+        date:Number,
+        month:Number,
+        year:Number
+      },
+      package: Number,
+      users: Number,
+      amount: Number,
+      level: String
+    }
+  ],
   taskLink: String
 });
 const paymentSchema = new mongoose.Schema({
@@ -620,7 +633,7 @@ app.get('/transaction/:category', async (req, res) => {
       if(input == 'robot'){
         //Filtering Category from Transaction Array
         foundUser.transaction.forEach(function(data){
-          if(data.from == 'Captcha Robot'){
+          if(data.from == 'Captcha robot'){
             category.push(data);
           }
         });
@@ -628,7 +641,15 @@ app.get('/transaction/:category', async (req, res) => {
       if(input == 'reActivation'){
         //Filtering Category from Transaction Array
         foundUser.transaction.forEach(function(data){
-          if(data.from == 'Upgrade'){
+          if(data.from == 'ID upgrade'){
+            category.push(data);
+          }
+        });
+      }
+      if(input == 'withdrawal'){
+        //Filtering Category from Transaction Array
+        foundUser.transaction.forEach(function(data){
+          if(data.from == 'Withdraw'){
             category.push(data);
           }
         });
@@ -1930,6 +1951,104 @@ app.post("/api/paymentVerification", async function(req, res) {
   }
 });
 
+app.post("/api/upgradeVerification", async function(req, res) {
+  const timeZone = 'Asia/Kolkata';
+  const currentTimeInTimeZone = DateTime.now().setZone(timeZone);
+
+  let year = currentTimeInTimeZone.year;
+  let month = currentTimeInTimeZone.month;
+  let date = currentTimeInTimeZone.day;
+  let hour = currentTimeInTimeZone.hour;
+  let minutes = currentTimeInTimeZone.minute;
+
+  if (!req.session.user) {
+    res.status(200).send({ redirect: true });
+  } else {
+    if (req.body.amount === "" || req.body.trnxId === "") {
+      const alertType = "warning";
+      const alert = "true";
+      const message = "Kindly fill all the given details";
+      res.status(200).send({ alertType, alert, message });
+    } else {
+      if(String(req.body.trnxId).length != 12){
+        const alertType = "warning";
+        const alert = "true";
+        const message = "Enter valid UTR number";
+        res.status(200).send({ alertType, alert, message });
+      }else{
+        try {
+          const duplicate = await Payment.findOne({ trnxId: req.body.trnxId });
+          if (duplicate) {
+            const alertType = "warning";
+            const alert = "true";
+            const message = "Transaction already exists";
+            res.status(200).send({ alertType, alert, message });
+          } else {
+            const foundUser = await User.findOne({ email: req.session.user.email });
+            if (foundUser) {
+              const foundAdmin = await Admin.findOne({ email: process.env.ADMIN });
+              const newPayment = {
+                trnxId: req.body.trnxId,
+                email: foundUser.email,
+                amount: req.body.amount,
+                username: foundUser.username,
+                time: {
+                  date: date,
+                  month: month,
+                  year: year,
+                  minutes: minutes,
+                  hour: hour
+                }
+              };
+  
+              if (!foundAdmin) {
+                const admin = new Admin({
+                  email: process.env.ADMIN,
+                  payment: [],
+                  withdrawal: []
+                });
+                await admin.save();
+  
+                await Admin.updateOne({ email: process.env.ADMIN }, { $set: { payment: [newPayment] } });
+              } else {
+                let pendingPayments = foundAdmin.payment;
+                pendingPayments.push(newPayment);
+                await Admin.updateOne({ email: process.env.ADMIN }, { $set: { payment: pendingPayments } });
+              }
+  
+              const newTransaction = {
+                type: 'Credit',
+                from: 'ID upgrade',
+                amount: req.body.amount,
+                status: 'Pending',
+                time: {
+                  date: date,
+                  month: month,
+                  year: year
+                },
+                trnxId: req.body.trnxId
+              };
+              let history = foundUser.transaction;
+              history.push(newTransaction);
+              await User.updateOne({ email: foundUser.email }, { $set: { transaction: history } });
+  
+              const newPaymentSchema = new Payment(newPayment);
+              await newPaymentSchema.save();
+  
+              const alertType = "success";
+              const alert = "true";
+              const message = "Payment details submitted.";
+              res.status(200).send({ alertType, alert, message });
+            }
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+  }
+});
+
 app.post("/api/bankDetails", async function(req, res) {
   if (!req.session.user) {
     return res.status(200).send({ redirect: true });
@@ -3179,7 +3298,167 @@ app.post('/activateUser', async (req, res)=>{
     }
     res.redirect('/dashboard');
   }
+});
+
+app.post('/api/checkUsers', async (req, res)=>{
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      const inputDate = req.body.date;
+      const [year, month, date] = inputDate.split('-');
+      
+      
+      const foundUsers = await User.find({status: 'Active'});
+      let stageFilter= [];
+      let dateFilter= [];
+      foundUsers.forEach(function(user){
+        if(Number(user.package.stage) == Number(req.body.amount)){
+          stageFilter.push(user);
+        }
+      });
+      stageFilter.forEach(function(user){
+        if(user.package.time.date == date && user.package.time.month == month && user.package.time.year == year){
+          dateFilter.push(user);
+        }
+      });
+      
+      
+      return res.status(200).send({users:dateFilter})
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 })
+
+app.post('/creditAutobot', async(req,res)=>{
+  const timeZone = 'Asia/Kolkata';
+  const currentTimeInTimeZone = DateTime.now().setZone(timeZone);
+  const { year, month, day: date, hour, minute: minutes } = currentTimeInTimeZone;
+
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      const amount = Number(req.body.amount);
+      const level = req.body.level;
+      const users = req.body.email;
+      let totalAmount = 0;
+      let totalUser = users.length;
+      
+      const levelCredits = {
+        240: {
+          level1: 3,
+          level2: 5,
+          level3: 7,
+          level4: 15,
+          level5: 20,
+          level6: 30,
+          level7: 70,
+          level8: 150,
+          level9: 200,
+          level10: 500
+        },
+        2000: {
+          level1: 20,
+          level2: 30,
+          level3: 50,
+          level4: 100,
+          level5: 400,
+          level6: 600,
+          level7: 800,
+          level8: 1000,
+          level9: 2000,
+          level10: 5000
+        },
+        7500: {
+          level1: 30,
+          level2: 70,
+          level3: 100,
+          level4: 200,
+          level5: 600,
+          level6: 1000,
+          level7: 2000,
+          level8: 4000,
+          level9: 8000,
+          level10: 14000
+        }
+      };
+
+      let levelCredit = levelCredits[amount] ? levelCredits[amount][level] : undefined;
+
+
+      await Promise.all(users.map(async (user) => {
+        
+        const foundUser = await User.findOne({ email: user });
+        await User.updateOne({ email: foundUser.email }, {
+          $set: {
+            earnings: {
+              captcha: foundUser.earnings.captcha,
+              franchise: foundUser.earnings.franchise,
+              total: foundUser.earnings.total + Number(levelCredit),
+              direct: foundUser.earnings.direct,
+              level: foundUser.earnings.level,
+              club: foundUser.earnings.club,
+              addition: foundUser.earnings.addition + Number(levelCredit),
+              addition2: foundUser.earnings.addition2,
+              addition3: foundUser.earnings.addition3,
+              balance: foundUser.earnings.balance + Number(levelCredit)
+            }
+          }
+        });
+      
+        const newTransaction = {
+          type: 'Credit',
+          from: 'Captcha robot',
+          amount: Number(levelCredit),
+          status: 'success',
+          time: {
+            date: date,
+            month: month,
+            year: year
+          },
+          trnxId: level
+        };
+      
+        let history = foundUser.transaction;
+        history.push(newTransaction);
+        await User.updateOne({ email: foundUser.email }, { $set: { transaction: history } });
+      
+        totalAmount += Number(levelCredit);
+      }));
+      
+      const foundAdmin = await Admin.findOne({ email: process.env.ADMIN });
+      let existingAutobot = foundAdmin.autobot;
+      
+      const newTransaction = {
+        time: {
+          date: date,
+          month: month,
+          year: year
+        },
+        package: amount,
+        users: totalUser,
+        amount: totalAmount,
+        level: level
+      };
+      
+      existingAutobot.push(newTransaction);
+      await Admin.updateOne({ email: process.env.ADMIN }, { $set: { autobot: existingAutobot } });
+      
+      
+
+
+      
+    } catch (err) {
+      console.log(err);
+      
+    }
+    res.redirect('/admin');
+  }
+});
 
 
 

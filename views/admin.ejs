@@ -25,6 +25,7 @@
     <link rel="stylesheet" type="text/css" href="../assets/vendors/css/cryptocoins/cryptocoins.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/pages/timeline.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/pages/dashboard-ico.css">
+
     <!-- END Page Level CSS-->
     <!-- BEGIN Custom CSS-->
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
@@ -112,7 +113,7 @@
                         <form class="form-horizontal form-referral-link row mt-2">
                         <div class="">
                             <fieldset class="form-label-group">
-                                <input type="text" style="text-transform: uppercase;" class="form-control" id="input" oninput="withdrawalButton()" required="" autofocus="">
+                                <input type="text" style="text-transform: uppercase;" class="form-control" id="input" oninput="withdrawalButton()" required=""  >
                                 <label for="input">Enter 'ENABLE BUTTON'</label>
                             </fieldset>
                         </div>
@@ -174,7 +175,7 @@
                             <form class="form-horizontal form-referral-link row mt-2" action="/planActivation" method="post">
                                 <div class="col-12 mt-2">
                                     <fieldset class="form-label-group">
-                                        <input type="text" class="form-control" name="directPercentage" id="directPercentage"  required="" autofocus="">
+                                        <input type="text" class="form-control" name="directPercentage" id="directPercentage"  required=""  >
                                         <label for="directPercentage">Direct Percentage</label>
                                     </fieldset>
                                     <input type="text" hidden name="username" value="<%=newPayment.username%>">
@@ -285,7 +286,7 @@
                                     </select>
                                   </div>
                                 <fieldset class="form-label-group">
-                                    <input type="text" class="form-control" name="input" id="input"  required="" autofocus="">
+                                    <input type="text" class="form-control" name="input" id="input"  required=""  >
                                     <label for="input">Enter details</label>
                                 </fieldset>
                             </div>
@@ -310,7 +311,7 @@
                         <form class="form-horizontal form-referral-link row mt-2" action="/qrData" method="post">
                             <div class="col-12 mt-2">
                                 <fieldset class="form-label-group">
-                                    <input type="text" class="form-control" name="upi" id="upi"  required="" autofocus="">
+                                    <input type="text" class="form-control" name="upi" id="upi"  required=""  >
                                     <label for="upi">Enter UPI ID</label>
                                 </fieldset>
                             </div>
@@ -336,13 +337,63 @@
                         <form class="form-horizontal form-referral-link row mt-2" action="/creditBalance" method="post">
                             <div class="col-12 mt-2">
                                 <fieldset class="form-label-group">
-                                    <input type="text" class="form-control" name="email" id="email"  required="" autofocus="">
+                                    <input type="text" class="form-control" name="email" id="email"  required=""  >
                                     <label for="email">Enter Email</label>
                                 </fieldset>
                                 <fieldset class="form-label-group">
-                                    <input type="number" class="form-control" name="amount" id="amount"  required="" autofocus="">
+                                    <input type="number" class="form-control" name="amount" id="amount"  required=""  >
                                     <label for="amount">Enter Amount</label>
                                 </fieldset>
+                            </div>
+                            <div class="col-md-2 col-12 py-1 text-center">
+                                <button type="submit" class="btn-gradient-primary my-1">Credit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+          </div>
+        </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title text-center">Credit Robot Income</h6>            
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                <hr>
+                <div>
+                    <div class="">
+                        <form class="form-horizontal form-referral-link row mt-2" action="/creditAutobot" method="post">
+                            <div class="col-12 mt-2">
+                                <div class="form-group">
+                                    <label for="type">Select type</label>
+                                    <select class="form-select form-select-sm" onchange="checkUsers()" name="amount" id="planAmount">
+                                      <option value="240">240</option>
+                                      <option value="2000">2000</option>
+                                      <option value="7500">7500</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="type">Select type</label>
+                                      <select class="form-select form-select-sm" name="level" id="planAmount">
+                                        <option value="level1">Level 1</option>
+                                        <option value="level2">Level 2</option>
+                                        <option value="level3">Level 3</option>
+                                        <option value="level4">Level 4</option>
+                                        <option value="level5">Level 5</option>
+                                        <option value="level6">Level 6</option>
+                                        <option value="level7">Level 7</option>
+                                        <option value="level8">Level 8</option>
+                                        <option value="level9">Level 9</option>
+                                        <option value="level10">Level 10</option>
+                                      </select>
+                                    </div>
+                                <fieldset class="form-label-group">
+                                    <input type="date" onchange="checkUsers()" id="date" name="date" class="form-control" required="" >
+                                    <label for="email">Enter Date</label>
+                                </fieldset>
+                                <div class="row" id="userDiv"></div>
                             </div>
                             <div class="col-md-2 col-12 py-1 text-center">
                                 <button type="submit" class="btn-gradient-primary my-1">Credit</button>
@@ -394,6 +445,40 @@
                 button.classList.add('hidden'); // Hide the button 
                 button.disabled = true; 
             } 
+        }
+
+        const checkUsers = function(){
+            const usersDiv = document.getElementById('userDiv');
+            const date = document.getElementById('date').value;
+            const amount = document.getElementById('planAmount').value;
+
+            $.ajax({
+                url: '/api/checkUsers',
+                data:{
+                    date: date,
+                    amount: amount
+                },
+                type: 'post',
+                success:function(data){
+                    console.log(data);
+                    usersDiv.innerHTML = ``
+                    
+                    if(data.users != 0){
+                        data.users.forEach(function(element){
+                            usersDiv.innerHTML += `<div class="col-9 mb-1">
+                                        <p>`+element.email+` | `+element.earnings.total+` | `+element.earnings.addition+`</p>
+                                    </div>
+                                    <div class="col-3 mb-1">
+                                        <input name="email[]" value="`+element.email+`" type="checkbox" class="switchery" data-size="sm" checked/>
+                                    </div>
+                                    <hr>`
+                        });
+                    }
+                },
+                error:function(){
+                    console.log(error);
+                }
+            })
         }
         
     </script>
