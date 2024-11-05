@@ -210,7 +210,8 @@ const adminSchema = new mongoose.Schema({
       package: Number,
       users: Number,
       amount: Number,
-      level: String
+      level: String,
+      email:[String]
     }
   ],
   taskLink: String
@@ -641,7 +642,7 @@ app.get('/transaction/:category', async (req, res) => {
       if(input == 'reActivation'){
         //Filtering Category from Transaction Array
         foundUser.transaction.forEach(function(data){
-          if(data.from == 'ID upgrade'){
+          if(data.from == 'Upgrade'){
             category.push(data);
           }
         });
@@ -664,6 +665,7 @@ app.get('/transaction/:category', async (req, res) => {
           email: foundUser.email,
           transaction: category,
           status: foundUser.status,
+          category: input,
           alert: 'nil'
         });
       }
@@ -1123,6 +1125,7 @@ app.post('/planActivation', async (req, res) => {
 
     try {
       const foundUser = await User.findOne({ email: req.body.email });
+      let type = 'direct';
       if (foundUser) {
         const foundAdmin = await Admin.findOne({ email: process.env.ADMIN });
         if (foundAdmin) {
@@ -1138,6 +1141,7 @@ app.post('/planActivation', async (req, res) => {
 
             const updatedTransaction = foundUser.transaction.map(transaction => {
               if (transaction.trnxId === req.body.trnxId) {
+                
                 const modifiedTransaction = {
                   time: transaction.time,
                   type: transaction.type,
@@ -1184,6 +1188,10 @@ app.post('/planActivation', async (req, res) => {
 
             const updatedTransaction = foundUser.transaction.map(transaction => {
               if (transaction.trnxId === req.body.trnxId) {
+
+                if(transaction.from == 'ID upgrade'){
+                  type = 'upgrade'
+                }
                 const modifiedTransaction = {
                   time: transaction.time,
                   type: transaction.type,
@@ -1206,18 +1214,58 @@ app.post('/planActivation', async (req, res) => {
             if (foundSponsor) {
 
               if(foundSponsor.status == 'Active'){
+                if(type == 'direct'){
 
+                  await User.updateOne({ email: foundSponsor.email }, {
+                    $set: {
+                      earnings: {
+                        captcha: foundSponsor.earnings.captcha,
+                        franchise: foundSponsor.earnings.franchise,
+                        total: foundSponsor.earnings.total + Math.floor(amount * directPercentage),
+                        direct: foundSponsor.earnings.direct + Math.floor(amount * directPercentage),
+                        level: foundSponsor.earnings.level,
+                        club: foundSponsor.earnings.club,
+                        addition: foundSponsor.earnings.addition,
+                        addition2: foundSponsor.earnings.addition2,
+                        addition3: foundSponsor.earnings.addition3,
+                        balance: foundSponsor.earnings.balance + Math.floor(amount * directPercentage)
+                      }
+                    }
+                  });
+    
+                  const transaction = foundSponsor.transaction;
+    
+                  const newTrnx = {
+                    type: 'Credit',
+                    from: 'Direct',
+                    amount: Math.floor(amount * directPercentage),
+                    status: 'success',
+                    trnxId: trnxId,
+                    time: {
+                      date: date,
+                      month: month,
+                      year: year
+                    }
+                  };
+    
+                  transaction.push(newTrnx);
+    
+    
+                  await User.updateOne({ email: foundSponsor.email }, { $set: { transaction: transaction } });
+                }
+                if(type == 'upgrade'){
+                  
                 await User.updateOne({ email: foundSponsor.email }, {
                   $set: {
                     earnings: {
                       captcha: foundSponsor.earnings.captcha,
                       franchise: foundSponsor.earnings.franchise,
                       total: foundSponsor.earnings.total + Math.floor(amount * directPercentage),
-                      direct: foundSponsor.earnings.direct + Math.floor(amount * directPercentage),
+                      direct: foundSponsor.earnings.direct,
                       level: foundSponsor.earnings.level,
                       club: foundSponsor.earnings.club,
                       addition: foundSponsor.earnings.addition,
-                      addition2: foundSponsor.earnings.addition2,
+                      addition2: foundSponsor.earnings.addition2 + Math.floor(amount * directPercentage),
                       addition3: foundSponsor.earnings.addition3,
                       balance: foundSponsor.earnings.balance + Math.floor(amount * directPercentage)
                     }
@@ -1228,7 +1276,7 @@ app.post('/planActivation', async (req, res) => {
   
                 const newTrnx = {
                   type: 'Credit',
-                  from: 'Direct',
+                  from: 'Upgrade',
                   amount: Math.floor(amount * directPercentage),
                   status: 'success',
                   trnxId: trnxId,
@@ -1243,6 +1291,7 @@ app.post('/planActivation', async (req, res) => {
   
   
                 await User.updateOne({ email: foundSponsor.email }, { $set: { transaction: transaction } });
+                }
 
               }
 
@@ -3442,7 +3491,8 @@ app.post('/creditAutobot', async(req,res)=>{
         package: amount,
         users: totalUser,
         amount: totalAmount,
-        level: level
+        level: level,
+        email:users
       };
       
       existingAutobot.push(newTransaction);

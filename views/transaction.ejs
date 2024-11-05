@@ -70,7 +70,37 @@
       <div class="content-wrapper">
         <div class="content-header row">
           <div class="content-header-left col-md-8 col-12 mb-2 breadcrumb-new">
-            <h3 class="content-header-title mb-0 d-inline-block">Payment</h3>
+            <%if(tab == 'true'){%>
+              <%if(category == 'direct'){%>
+
+              <h3 class="content-header-title mb-0 d-inline-block">Direct Income</h3>
+              <%}%>
+              <%if(category == 'level'){%>
+                
+              <h3 class="content-header-title mb-0 d-inline-block">Level Income</h3>
+              <%}%>
+              <%if(category == 'club'){%>
+                
+              <h3 class="content-header-title mb-0 d-inline-block">Club Income</h3>
+              <%}%>
+              <%if(category == 'robot'){%>
+                
+              <h3 class="content-header-title mb-0 d-inline-block">Captcha Robot Income</h3>
+              <%}%>
+              <%if(category == 'reActivation'){%>
+                
+              <h5 class="content-header-title mb-0 d-inline-block">Reactivation and Upgrade Income</h5>
+              <%}%>
+              <%if(category == 'withdrawal'){%>
+                
+              <h3 class="content-header-title mb-0 d-inline-block">Withdrawal History</h3>
+              <%}%>
+              <%if(category == 'captcha'){%>
+                
+              <h3 class="content-header-title mb-0 d-inline-block">Captcha Income</h3>
+              <%}%>
+            <%}else{%>
+            <%}%>
             <div class="row breadcrumbs-top d-inline-block">
               <div class="breadcrumb-wrapper col-12">
                 <ol class="breadcrumb">
