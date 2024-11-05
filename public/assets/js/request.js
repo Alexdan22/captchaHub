@@ -296,7 +296,7 @@ const withdraw = function(){
             
             const balances = document.getElementsByClassName('availableBalance');
             for (let i = 0; i < balances.length; i++) {
-            balances[i].innerHTML = data.availableBalance;
+            balances[i].innerHTML = data.balance;
             }
         }
           $( document ).ready(function() {

@@ -2155,7 +2155,7 @@ app.post("/api/withdrawal", async function(req, res) {
   if (!req.session.user) {
     return res.status(200).send({ redirect: true });
   }else{
-
+    const amount = Number(req.body.amount);
     try {
       const foundUser = await User.findOne({ email: req.session.user.email });
   
@@ -2164,20 +2164,20 @@ app.post("/api/withdrawal", async function(req, res) {
       }else{
         const newValue = foundUser.earnings.balance - Number(req.body.amount);
   
-        if (req.body.amount < 199) {
+        if (amount < 199) {
           return res.status(200).send({
             alertType : "warning",
             alert : "true",
             message: "Entered amount is less than Minimum withdraw",
-            availableBalance: foundUser.earnings.availableBalance
+            balance: foundUser.earnings.balance
           });
         }else{
-          if (foundUser.earnings.availableBalance < req.body.amount) {
+          if (foundUser.earnings.balance < amount) {
             return res.status(200).send({
               alertType : "warning",
               alert : "true",
               message: "Low balance!!",
-              availableBalance: foundUser.earnings.availableBalance
+              balance: foundUser.earnings.balance
             });
           }else{
             if (!foundUser.bankDetails) {
@@ -2185,23 +2185,32 @@ app.post("/api/withdrawal", async function(req, res) {
                 alertType : "warning",
                 alert : "true",
                 message: "Fill in you Bank Details to proceed",
-                availableBalance: foundUser.earnings.availableBalance
+                balance: foundUser.earnings.balance
               });
             }else{
               let limitReached = false;
+
               foundUser.transaction.forEach(transaction => {
-                if (transaction.from === "Withdraw" && transaction.status !== 'failed' &&
-                    transaction.time.date === date && transaction.time.month === month) {
+                const { from, status, time } = transaction;
+                const { date: transDate, month: transMonth } = time;
+
+                
+                if (from === "Withdraw" && 
+                    (status === 'Pending' || status === 'success') && 
+                    parseInt(transDate) === date && 
+                    parseInt(transMonth) === month) {
                   limitReached = true;
                 }
               });
-          
-              if (limitReached) {
+
+              console.log(`limitReached: ${limitReached}`);
+
+              if (limitReached === true) {
                 return res.status(200).send({
                   alertType: "warning",
                   alert: "true",
                   message: "Daily Withdrawal limit reached",
-                  availableBalance: foundUser.earnings.availableBalance
+                  balance: foundUser.earnings.balance
                 });
               }else{
           
@@ -2263,7 +2272,7 @@ app.post("/api/withdrawal", async function(req, res) {
                   alertType: "success",
                   alert: "true",
                   message: 'Withdrawal Success',
-                  availableBalance: newValue
+                  balance: newValue
                 });
               }
             }
