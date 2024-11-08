@@ -273,7 +273,7 @@ const Switch = new mongoose.model('Switch', withdrawalSchema);
 
 
 //Automated Functions
-var job = schedule.scheduleJob('0 4 * * *', async(scheduledTime) => {
+var job = schedule.scheduleJob('30 1 * * *', async(scheduledTime) => {
   try {
     const cooldown = await User.find({status: 'Active'});
     for (const users of cooldown) {
