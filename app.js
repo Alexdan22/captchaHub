@@ -13,6 +13,8 @@ const cors = require('cors');
 const schedule = require('node-schedule');
 const sdk = require('api')('@decentro/v1.0#pwx2s1ddlp6q9m73');
 const { DateTime } = require('luxon');
+const xlsx = require('xlsx');
+const fs = require('fs');
 const app = express();
 const QRCode = require('qrcode');
 
@@ -100,7 +102,7 @@ const clubSchema = new mongoose.Schema({
     level5: Number,
     level6: Number
   },
-  stage: String
+  stage: Boolean
 });
 const userSchema = new mongoose.Schema({
   username: {
@@ -287,9 +289,6 @@ app.get("/register", function(req, res) {
     sponsorID
   });
 });
-
-
-
 
 app.get('/updateSwitch', async (req, res)=>{
   if(!req.session.admin){
@@ -626,7 +625,7 @@ app.get('/transaction/:category', async (req, res) => {
       if(input == 'club'){
         //Filtering Category from Transaction Array
         foundUser.transaction.forEach(function(data){
-          if(data.from == 'Club'){
+          if(data.from == 'Club Income'){
             category.push(data);
           }
         });
@@ -905,6 +904,782 @@ app.get('/franchise', async (req, res)=>{
   }
 });
 
+app.get('/download-mobile-numbers', async(req, res) => {
+if(!req.session.admin){
+  res.redirect('/admin');
+}else{
+  try {
+      // Sample data, replace with your actual data
+      const users = await User.find({});
+
+      // Extract mobile numbers
+      const mobileNumbers = users.map(user => ({"Email": user.email, "Mobile Number": user.mobile }));
+
+      // Create a new workbook
+      const wb = xlsx.utils.book_new();
+
+      // Convert data to a worksheet
+      const ws = xlsx.utils.json_to_sheet(mobileNumbers);
+
+      // Append the worksheet to the workbook
+      xlsx.utils.book_append_sheet(wb, ws, 'Mobile Numbers');
+
+      // Define the file path
+      const filePath = path.join(__dirname, 'MobileNumbers.xlsx');
+
+      // Write the workbook to the file
+      xlsx.writeFile(wb, filePath);
+
+      // Send the file for download
+      res.download(filePath, 'MobileNumbers.xlsx', (err) => {
+        if (err) {
+          console.error('Error sending the file:', err);
+          res.status(500).send('Could not download the file');
+        }
+        // Optional: Delete the file after download to save space
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('Error deleting the file:', err);
+          }
+        });
+      });
+
+  
+  } catch (err) {
+    console.log(err);
+    
+  }
+}
+
+});
+
+app.get("/clubTeam", async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/");
+  }
+
+  try {
+    const foundUser = await User.findOne({ email: req.session.user.email });
+    const foundDirect = await User.find({sponsorID: foundUser.userID});
+    const current = foundDirect.filter(activeUsers => activeUsers.status == 'Active');
+    const currentCount = current.length;
+
+    // Club system calculation Start
+    let level1 = [];
+    let level2 = [];
+    let level3 = [];
+    let level4 = [];
+    let level5 = [];
+    let level6 = [];
+    let clubLevel;
+    
+    if (foundUser.club.stage == true) {
+      const team = {
+        team1: foundUser.club.team.member1,
+        team2: foundUser.club.team.member2,
+        team3: foundUser.club.team.member3,
+        team4: foundUser.club.team.member4,
+      };
+    
+      level1 = await Promise.all([
+        User.findOne({ userID: team.team1 }),
+        User.findOne({ userID: team.team2 }),
+        User.findOne({ userID: team.team3 }),
+        User.findOne({ userID: team.team4 })
+      ]);
+    
+      async function getMembers(level) {
+        const nextLevel = [];
+        await Promise.all(level.map(async (member) => {
+          if (member.club.stage == true) {
+            const team = {
+              team1: member.club.team.member1,
+              team2: member.club.team.member2,
+              team3: member.club.team.member3,
+              team4: member.club.team.member4,
+            };
+            const members = await Promise.all([
+              User.findOne({ userID: team.team1 }),
+              User.findOne({ userID: team.team2 }),
+              User.findOne({ userID: team.team3 }),
+              User.findOne({ userID: team.team4 })
+            ]);
+            nextLevel.push(...members);
+          }
+        }));
+        return nextLevel;
+      }
+    
+      level2 = await getMembers(level1);
+      level3 = await getMembers(level2);
+      level4 = await getMembers(level3);
+      level5 = await getMembers(level4);
+      level6 = await getMembers(level5);
+    
+      console.log(level1.length, level2.length, level3.length, level4.length, level5.length, level6.length);
+    }
+    
+    // Club system calculation End
+
+    
+    let level1Downline = [];
+    let level2Downline = [];
+    let level3Downline = [];
+    let level4Downline = [];
+    let level5Downline = [];
+    let level6Downline = [];
+    let totalDownline =[];
+    
+    // Helper function to get downline members
+    async function getDownline(sponsorID) {
+      return await User.find({ sponsorID });
+    }
+    
+    // Helper function to handle downline level
+    async function handleDownline(currentLevel) {
+      const nextLevel = [];
+      await Promise.all(currentLevel.map(async (user) => {
+        const downline = await getDownline(user.userID);
+        nextLevel.push(...downline);
+      }));
+      return nextLevel;
+    }
+    
+    async function calculateDownlines() {
+      // Level 1 Downline
+      level1Downline = await handleDownline(foundDirect);
+    
+      // Level 2 Downline
+      level2Downline = await handleDownline(level1Downline);
+    
+      // Level 3 Downline
+      level3Downline = await handleDownline(level2Downline);
+    
+      // Level 4 Downline
+      level4Downline = await handleDownline(level3Downline);
+    
+      // Level 5 Downline
+      level5Downline = await handleDownline(level4Downline);
+      
+      // Level 6 Downline
+      level6Downline = await handleDownline(level5Downline);
+    
+      const totalCount = foundDirect.length + level1Downline.length + level2Downline.length + level3Downline.length + level4Downline.length + level5Downline.length + level6Downline.length;
+    // Combine all downlines into totalDownline 
+      totalDownline = [ 
+        ...foundDirect, 
+        ...level1Downline, 
+        ...level2Downline, 
+        ...level3Downline, 
+        ...level4Downline, 
+        ...level5Downline, 
+        ...level6Downline 
+      ];
+      return totalDownline;
+    }
+    
+    // Call the function to calculate downlines
+    
+    totalDownline = await calculateDownlines();
+    const totalActive = totalDownline.filter(activeUsers => activeUsers.status === 'Active');
+    console.log(totalDownline.length, totalActive.length);
+    
+      //Club level calculation
+    if(level1.length == 4){
+      clubLevel = 1;
+    }
+    if(level2.length == 16){
+      clubLevel = 2;
+    }
+    if(level3.length == 64){
+      clubLevel = 3;
+    }
+    if(level4.length == 256){
+      clubLevel = 4;
+    }
+    if(level5.length == 1024){
+      clubLevel = 5;
+    }
+    if(level6.length == 4096){
+      clubLevel = 6;
+    }
+    
+    
+
+    const {
+      username: name,
+      email,
+      userID,
+      status,
+    } = foundUser;
+
+    const alert = 'nil';
+
+    res.render("club", {
+      name,
+      email,
+      userID,
+      clubTeam: foundUser.club,
+      clubLevel,
+      current,
+      currentCount,
+      totalDownline:totalDownline.length,
+      totalActive:totalActive.length,
+      alert,
+      status,
+      team: level1,
+      level1:level1.length,
+      level2:level2.length,
+      level3:level3.length,
+      level4:level4.length,
+      level5:level5.length,
+      level6:level6.length,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("An error occurred. Please try again later.");
+  }
+});
+
+app.get("/clubTeam/:userID", async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/");
+  }
+
+  try {
+    const foundUser = await User.findOne({ email: req.session.user.email });
+    const foundDirect = await User.find({sponsorID: foundUser.userID});
+    const teamMember = await User.findOne({userID:req.params.userID});
+    const teamMemberDirect = await User.find({sponsorID:teamMember.userID});
+
+    let teamMemberDownline = [];
+
+    if(teamMember.club.stage == true){
+      const team = {
+        team1: teamMember.club.team.member1,
+        team2: teamMember.club.team.member2,
+        team3: teamMember.club.team.member3,
+        team4: teamMember.club.team.member4,
+      };
+    
+      teamMemberDownline = await Promise.all([
+        User.findOne({ userID: team.team1 }),
+        User.findOne({ userID: team.team2 }),
+        User.findOne({ userID: team.team3 }),
+        User.findOne({ userID: team.team4 })
+      ]);
+    }
+
+    // Club system calculation Start
+    let level1 = [];
+    let level2 = [];
+    let level3 = [];
+    let level4 = [];
+    let level5 = [];
+    let level6 = [];
+    let clubLevel
+    
+    if (foundUser.club.stage == true) {
+      const team = {
+        team1: foundUser.club.team.member1,
+        team2: foundUser.club.team.member2,
+        team3: foundUser.club.team.member3,
+        team4: foundUser.club.team.member4,
+      };
+    
+      level1 = await Promise.all([
+        User.findOne({ userID: team.team1 }),
+        User.findOne({ userID: team.team2 }),
+        User.findOne({ userID: team.team3 }),
+        User.findOne({ userID: team.team4 })
+      ]);
+    
+      async function getMembers(level) {
+        const nextLevel = [];
+        await Promise.all(level.map(async (member) => {
+          if (member.club.stage == true) {
+            const team = {
+              team1: member.club.team.member1,
+              team2: member.club.team.member2,
+              team3: member.club.team.member3,
+              team4: member.club.team.member4,
+            };
+            const members = await Promise.all([
+              User.findOne({ userID: team.team1 }),
+              User.findOne({ userID: team.team2 }),
+              User.findOne({ userID: team.team3 }),
+              User.findOne({ userID: team.team4 })
+            ]);
+            nextLevel.push(...members);
+          }
+        }));
+        return nextLevel;
+      }
+    
+      level2 = await getMembers(level1);
+      level3 = await getMembers(level2);
+      level4 = await getMembers(level3);
+      level5 = await getMembers(level4);
+      level6 = await getMembers(level5);
+    
+      console.log(level1.length, level2.length, level3.length, level4.length, level5.length, level6.length);
+    }
+    
+    // Club system calculation End
+
+    
+    let level1Downline = [];
+    let level2Downline = [];
+    let level3Downline = [];
+    let level4Downline = [];
+    let level5Downline = [];
+    let level6Downline = [];
+    let totalDownline =[];
+    
+    // Helper function to get downline members
+    async function getDownline(sponsorID) {
+      return await User.find({ sponsorID });
+    }
+    
+    // Helper function to handle downline level
+    async function handleDownline(currentLevel) {
+      const nextLevel = [];
+      await Promise.all(currentLevel.map(async (user) => {
+        const downline = await getDownline(user.userID);
+        nextLevel.push(...downline);
+      }));
+      return nextLevel;
+    }
+    
+    async function calculateDownlines() {
+      // Level 1 Downline
+      level1Downline = await handleDownline(foundDirect);
+    
+      // Level 2 Downline
+      level2Downline = await handleDownline(level1Downline);
+    
+      // Level 3 Downline
+      level3Downline = await handleDownline(level2Downline);
+    
+      // Level 4 Downline
+      level4Downline = await handleDownline(level3Downline);
+    
+      // Level 5 Downline
+      level5Downline = await handleDownline(level4Downline);
+      
+      // Level 6 Downline
+      level6Downline = await handleDownline(level5Downline);
+    
+      const totalCount = foundDirect.length + level1Downline.length + level2Downline.length + level3Downline.length + level4Downline.length + level5Downline.length + level6Downline.length;
+    // Combine all downlines into totalDownline 
+      totalDownline = [ 
+        ...foundDirect, 
+        ...level1Downline, 
+        ...level2Downline, 
+        ...level3Downline, 
+        ...level4Downline, 
+        ...level5Downline, 
+        ...level6Downline 
+      ];
+      return totalDownline;
+    }
+    
+    // Call the function to calculate downlines
+    
+    totalDownline = await calculateDownlines();
+    const totalActive = totalDownline.filter(activeUsers => activeUsers.status === 'Active');
+    console.log(totalDownline.length, totalActive.length);
+
+    //Club level calculation
+    if(level1 == 4){
+      clubLevel = 1;
+    }
+    if(level2 == 16){
+      clubLevel = 2;
+    }
+    if(level3 == 64){
+      clubLevel = 3;
+    }
+    if(level4 == 256){
+      clubLevel = 4;
+    }
+    if(level5 == 1024){
+      clubLevel = 5;
+    }
+    if(level6 == 4096){
+      clubLevel = 6;
+    }
+    
+    
+    
+
+    const {
+      username: name,
+      email,
+      userID,
+      status,
+    } = foundUser;
+
+    res.render("teamNetwork", {
+      name,
+      memberName:teamMember.username,
+      email,
+      userID,
+      clubTeam: foundUser.club,
+      clubLevel,
+      totalDownline:totalDownline.length,
+      totalActive:totalActive.length,
+      status,
+      stage:teamMember.club.stage,
+      team: teamMemberDownline,
+      teamMemberDirect,
+      level1:level1.length,
+      level2:level2.length,
+      level3:level3.length,
+      level4:level4.length,
+      level5:level5.length,
+      level6:level6.length,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("An error occurred. Please try again later.");
+  }
+});
+
+app.get('/api/clubIncomeCredit', async (req, res)=>{
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      const users = await User.find({});
+      const current = users.filter(activeUsers => activeUsers.status === 'Active');
+
+      current.forEach(async(foundUser)=>{
+        
+        const foundDirect = await User.find({sponsorID: foundUser.userID});
+    
+        // Club system calculation Start
+        let level1 = [];
+        let level2 = [];
+        let level3 = [];
+        let level4 = [];
+        let level5 = [];
+        let level6 = [];
+        let clubLevel;
+        
+        if (foundUser.club.stage == true) {
+          const team = {
+            team1: foundUser.club.team.member1,
+            team2: foundUser.club.team.member2,
+            team3: foundUser.club.team.member3,
+            team4: foundUser.club.team.member4,
+          };
+        
+          level1 = await Promise.all([
+            User.findOne({ userID: team.team1 }),
+            User.findOne({ userID: team.team2 }),
+            User.findOne({ userID: team.team3 }),
+            User.findOne({ userID: team.team4 })
+          ]);
+        
+          async function getMembers(level) {
+            const nextLevel = [];
+            await Promise.all(level.map(async (member) => {
+              if (member.club.stage == true) {
+                const team = {
+                  team1: member.club.team.member1,
+                  team2: member.club.team.member2,
+                  team3: member.club.team.member3,
+                  team4: member.club.team.member4,
+                };
+                const members = await Promise.all([
+                  User.findOne({ userID: team.team1 }),
+                  User.findOne({ userID: team.team2 }),
+                  User.findOne({ userID: team.team3 }),
+                  User.findOne({ userID: team.team4 })
+                ]);
+                nextLevel.push(...members);
+              }
+            }));
+            return nextLevel;
+          }
+        
+          level2 = await getMembers(level1);
+          level3 = await getMembers(level2);
+          level4 = await getMembers(level3);
+          level5 = await getMembers(level4);
+          level6 = await getMembers(level5);
+        
+        }
+        
+        // Club system calculation End
+
+        
+          //Club level calculation
+        if(level1.length == 4){
+          clubLevel = 1;
+        }
+        if(level2.length == 16){
+          clubLevel = 2;
+        }
+        if(level3.length == 64){
+          clubLevel = 3;
+        }
+        if(level4.length == 256){
+          clubLevel = 4;
+        }
+        if(level5.length == 1024){
+          clubLevel = 5;
+        }
+        if(level6.length == 4096){
+          clubLevel = 6;
+        }
+
+        if(clubLevel == 1){
+
+          await User.updateOne({ email: foundUser.email }, {
+            $set: {
+              earnings: {
+                captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + 20,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club + 20,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + 20
+              }
+            }
+          });
+
+          const transaction = foundUser.transaction;
+
+          const newTrnx = {
+            type: 'Credit',
+            from: 'Club Income',
+            amount: 20,
+            status: 'success',
+            trnxId: 'Level 1',
+            time: {
+              date: date,
+              month: month,
+              year: year
+            }
+          };
+
+          transaction.push(newTrnx);
+
+
+          await User.updateOne({ email: foundUser.email }, { $set: { transaction: transaction } });
+        }
+        if(clubLevel == 2){
+          
+          await User.updateOne({ email: foundUser.email }, {
+            $set: {
+              earnings: {
+                captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + 180,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club + 180,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + 180
+              }
+            }
+          });
+
+          const transaction = foundUser.transaction;
+
+          const newTrnx = {
+            type: 'Credit',
+            from: 'Club Income',
+            amount: 180,
+            status: 'success',
+            trnxId: 'Level 2',
+            time: {
+              date: date,
+              month: month,
+              year: year
+            }
+          };
+
+          transaction.push(newTrnx);
+
+
+          await User.updateOne({ email: foundUser.email }, { $set: { transaction: transaction } });
+        }
+        if(clubLevel == 3){
+          
+          await User.updateOne({ email: foundUser.email }, {
+            $set: {
+              earnings: {
+                captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + 1140,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club + 1140,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + 1140
+              }
+            }
+          });
+
+          const transaction = foundUser.transaction;
+
+          const newTrnx = {
+            type: 'Credit',
+            from: 'Club Income',
+            amount: 1140,
+            status: 'success',
+            trnxId: 'Level 3',
+            time: {
+              date: date,
+              month: month,
+              year: year
+            }
+          };
+
+          transaction.push(newTrnx);
+
+
+          await User.updateOne({ email: foundUser.email }, { $set: { transaction: transaction } });
+        }
+        if(clubLevel == 4){
+          
+          await User.updateOne({ email: foundUser.email }, {
+            $set: {
+              earnings: {
+                captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + 6260,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club + 6260,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + 6260
+              }
+            }
+          });
+
+          const transaction = foundUser.transaction;
+
+          const newTrnx = {
+            type: 'Credit',
+            from: 'Club Income',
+            amount: 6260,
+            status: 'success',
+            trnxId: 'Level 4',
+            time: {
+              date: date,
+              month: month,
+              year: year
+            }
+          };
+
+          transaction.push(newTrnx);
+
+
+          await User.updateOne({ email: foundUser.email }, { $set: { transaction: transaction } });
+        }
+        if(clubLevel == 5){
+          
+          await User.updateOne({ email: foundUser.email }, {
+            $set: {
+              earnings: {
+                captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + 31860,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club + 31860,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + 31860
+              }
+            }
+          });
+
+          const transaction = foundUser.transaction;
+
+          const newTrnx = {
+            type: 'Credit',
+            from: 'Club Income',
+            amount: 31860,
+            status: 'success',
+            trnxId: 'Level 5',
+            time: {
+              date: date,
+              month: month,
+              year: year
+            }
+          };
+
+          transaction.push(newTrnx);
+
+
+          await User.updateOne({ email: foundUser.email }, { $set: { transaction: transaction } });
+        }
+        if(clubLevel == 6){
+          
+          await User.updateOne({ email: foundUser.email }, {
+            $set: {
+              earnings: {
+                captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + 154740,
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club + 154740,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3,
+                balance: foundUser.earnings.balance + 154740
+              }
+            }
+          });
+
+          const transaction = foundUser.transaction;
+
+          const newTrnx = {
+            type: 'Credit',
+            from: 'Club Income',
+            amount: 154740,
+            status: 'success',
+            trnxId: 'Level 6',
+            time: {
+              date: date,
+              month: month,
+              year: year
+            }
+          };
+
+          transaction.push(newTrnx);
+
+
+          await User.updateOne({ email: foundUser.email }, { $set: { transaction: transaction } });
+        }
+        
+       
+      });
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+})
+
 
 
 
@@ -927,6 +1702,9 @@ app.post('/api/register', async (req, res) => {
     sponsorID: req.body.sponsorID,
     userID: userID,
     status: "Inactive",
+    club:{
+      stage:false
+    },
     earnings: {
       captcha: 0,
       franchise: 0,
@@ -3389,7 +4167,7 @@ app.post('/api/checkUsers', async (req, res)=>{
       
     }
   }
-})
+});
 
 app.post('/creditAutobot', async(req,res)=>{
   const timeZone = 'Asia/Kolkata';
@@ -3516,6 +4294,202 @@ app.post('/creditAutobot', async(req,res)=>{
       
     }
     res.redirect('/admin');
+  }
+});
+
+app.post('/api/clubMemberUpdate', async (req, res)=>{
+  if(!req.session.user){
+    res.redirect('/');
+  }else{
+    try {
+      const foundUser = await User.findOne({email:req.session.user.email});
+      const { member1, member2, member3, member4 } = req.body;
+
+      if (member1 !== member2 && member1 !== member3 && member1 !== member4 &&
+          member2 !== member3 && member2 !== member4 &&
+          member3 !== member4) {
+        // Values are unique
+          await User.updateOne({email:foundUser.email}, {$set:{
+          club:{
+            team:{
+              member1:member1,
+              member2:member2,
+              member3:member3,
+              member4:member4,
+            },
+            stage:true
+          }
+        }});
+        console.log('All members are unique');
+        res.status(200).send('All members are unique');
+      } else {
+        // Some values are the same
+        console.log('Members must be unique');
+        res.status(200).send('Members must be unique');
+      }
+      
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
+});
+
+
+
+
+app.post('/test', async (req, res)=>{
+  if(!req.session.user){
+    res.redirect('/');
+  }else{
+    try {
+      const foundUser = await User.findOne({email:req.session.user.email});
+      let level1 = [];
+      let level2 = [];
+      let level3 = [];
+      let level4 = [];
+      let level5 = [];
+      let level6 = [];
+      
+      //Push the club members to array 
+        if(foundUser.club.stage == true){
+          const team = {
+            team1: foundUser.club.team.member1,
+            team2: foundUser.club.team.member2,
+            team3: foundUser.club.team.member3,
+            team4: foundUser.club.team.member4,
+          }
+          const team1 = await User.findOne({userID:team.team1});
+          level1.push(team1);
+          const team2 = await User.findOne({userID:team.team2});
+          level1.push(team2);
+          const team3 = await User.findOne({userID:team.team3});
+          level1.push(team3);
+          const team4 = await User.findOne({userID:team.team4});
+          level1.push(team4);
+
+          //Push Level 1 club members to level 2
+          level1.forEach(async(member)=>{
+
+            if(member.club.stage == true){
+
+              const level1Team = {
+                team1: member.club.team.member1,
+                team2: member.club.team.member2,
+                team3: member.club.team.member3,
+                team4: member.club.team.member4,
+              }
+              const level1Team1 = await User.findOne({userID:level1Team.team1});
+              level2.push(level1Team1);
+              const level1Team2 = await User.findOne({userID:level1Team.team2});
+              level2.push(level1Team2);
+              const level1Team3 = await User.findOne({userID:level1Team.team3});
+              level2.push(level1Team3);
+              const level1Team4 = await User.findOne({userID:level1Team.team4});
+              level2.push(level1Team4);
+              
+            }
+          });
+
+          //Push Level 2 club members to level 3
+          level2.forEach(async(member)=>{
+
+            if(member.club.stage == true){
+
+              const level2Team = {
+                team1: member.club.team.member1,
+                team2: member.club.team.member2,
+                team3: member.club.team.member3,
+                team4: member.club.team.member4,
+              }
+              const level2Team1 = await User.findOne({userID:level2Team.team1});
+              level3.push(level2Team1);
+              const level2Team2 = await User.findOne({userID:level2Team.team2});
+              level3.push(level2Team2);
+              const level2Team3 = await User.findOne({userID:level2Team.team3});
+              level3.push(level2Team3);
+              const level2Team4 = await User.findOne({userID:level2Team.team4});
+              level3.push(level2Team4);
+              
+            }
+          });
+
+          //Push Level 3 club members to level 4
+          level3.forEach(async(member)=>{
+
+            if(member.club.stage == true){
+
+              const level3Team = {
+                team1: member.club.team.member1,
+                team2: member.club.team.member2,
+                team3: member.club.team.member3,
+                team4: member.club.team.member4,
+              }
+              const level3Team1 = await User.findOne({userID:level3Team.team1});
+              level4.push(level3Team1);
+              const level3Team2 = await User.findOne({userID:level3Team.team2});
+              level4.push(level3Team2);
+              const level3Team3 = await User.findOne({userID:level3Team.team3});
+              level4.push(level3Team3);
+              const level3Team4 = await User.findOne({userID:level3Team.team4});
+              level4.push(level3Team4);
+              
+            }
+          });
+
+          //Push Level 4 club members to level 5
+          level4.forEach(async(member)=>{
+
+            if(member.club.stage == true){
+
+              const level4Team = {
+                team1: member.club.team.member1,
+                team2: member.club.team.member2,
+                team3: member.club.team.member3,
+                team4: member.club.team.member4,
+              }
+              const level4Team1 = await User.findOne({userID:level4Team.team1});
+              level5.push(level4Team1);
+              const level4Team2 = await User.findOne({userID:level4Team.team2});
+              level5.push(level4Team2);
+              const level4Team3 = await User.findOne({userID:level4Team.team3});
+              level5.push(level4Team3);
+              const level4Team4 = await User.findOne({userID:level4Team.team4});
+              level5.push(level4Team4);
+              
+            }
+          });
+
+          //Push Level 5 club members to level 6
+          level5.forEach(async(member)=>{
+
+            if(member.club.stage == true){
+
+              const level5Team = {
+                team1: member.club.team.member1,
+                team2: member.club.team.member2,
+                team3: member.club.team.member3,
+                team4: member.club.team.member4,
+              }
+              const level5Team1 = await User.findOne({userID:level5Team.team1});
+              level6.push(level5Team1);
+              const level5Team2 = await User.findOne({userID:level5Team.team2});
+              level6.push(level5Team2);
+              const level5Team3 = await User.findOne({userID:level5Team.team3});
+              level6.push(level5Team3);
+              const level5Team4 = await User.findOne({userID:level5Team.team4});
+              level6.push(level5Team4);
+              
+            }
+          });
+
+
+        }
+
+    } catch (err) {
+      console.log(err);
+      
+    }
   }
 });
 

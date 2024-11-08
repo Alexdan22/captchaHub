@@ -52,12 +52,22 @@
             </li>
             <%if(status == 'Active'){%>
               <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Upgrade</span></a>
+              </li>
+                  
+            <li class="active"><a href="#"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">My team</span></a>
+              <ul class="menu-content">
+                <li><a class="menu-item" href="/clubTeam">Team Club</a>
+                </li>
+                <li><a class="menu-item" href="/downline">Downline</a>
+                </li>
+              </ul>
+            </li>
             <%}else{%>
               <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Join today</span></a>
+              </li>
+              <li class=" nav-item"><a href="/downline"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Downline</span></a>
+              </li>
             <%}%>
-            </li>
-            <li class=" nav-item"><a href="/downline"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Downline</span></a>
-            </li>
             <li class="active"><a href="/transaction"><i class="icon-shuffle"></i><span class="menu-title" data-i18n="">Transactions</span></a>
             </li>
             <li class=" nav-item mt-3"><a href="/log-out"><span class="menu-title" data-i18n="">Log out</span></a>

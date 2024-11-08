@@ -39,7 +39,7 @@
         <div class="navbar-header d-md-none">
           <ul class="nav navbar-nav flex-row">
             <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
-            <li class="nav-item d-md-none"><a class="navbar-brand" href="/dashboard"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
+            <li class="nav-item d-md-none"><a class="navbar-brand" href="/admin"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
             </ul>
         </div>
       </div>
@@ -49,9 +49,9 @@
 
 
     <div class="main-menu menu-fixed menu-dark menu-bg-default rounded menu-accordion menu-shadow">
-      <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/dashboard"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
+      <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/admin"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-          <li class="active"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+          <li class="active"><a href="/admin"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
           </li>
           <li class=" nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
           </li>
@@ -321,8 +321,32 @@
                         </form>
                     </div>
                 </div>
-          </div>
+                </div>
+            </div>
         </div>
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title text-center">Credit Club Income</h6>            
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                <hr>
+                <div>
+                    
+                    <div class="col-md-2 col-12 py-1 text-center">
+                        <form class="form-horizontal form-referral-link row mt-2">
+                        <div class="">
+                            <fieldset class="form-label-group">
+                                <input type="text" style="text-transform: uppercase;" class="form-control" id="clubInput" oninput="clubButton()" required=""  >
+                                <label for="input">Enter 'ENABLE BUTTON'</label>
+                            </fieldset>
+                        </div>
+                    </form>
+                    <a href="/api/clubIncomeCredit" id="clubIncomeCredit" class="btn-gradient-secondary hidden my-1">Click me to Credit Club Income</a>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
         
         <div class="card">
@@ -438,6 +462,18 @@
         const withdrawalButton = function() {
              const input = document.getElementById('input').value; 
              const button = document.getElementById('manualTaskOverride'); 
+             if (input.toUpperCase() === 'ENABLE BUTTON') { 
+                button.classList.remove('hidden'); // Show the button 
+                button.disabled = false; 
+            } else { 
+                button.classList.add('hidden'); // Hide the button 
+                button.disabled = true; 
+            } 
+        }
+
+        const clubButton = function() {
+             const input = document.getElementById('clubInput').value; 
+             const button = document.getElementById('clubIncomeCredit'); 
              if (input.toUpperCase() === 'ENABLE BUTTON') { 
                 button.classList.remove('hidden'); // Show the button 
                 button.disabled = false; 

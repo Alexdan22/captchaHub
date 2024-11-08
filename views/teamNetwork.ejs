@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="CryptoDash admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, CryptoDash Cryptocurrency Dashboard Template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="ThemeSelection">
+    <title>Dashboard - Captcha Hub</title>
+    <link rel="apple-touch-icon" href="../assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,300i,400,400i,600,600i,700,700i|Comfortaa:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+    crossorigin="anonymous" />
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/charts/chartist-plugin-tooltip.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/app.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/core/menu/menu-types/vertical-compact-menu.css">
+    <link rel="stylesheet" type="text/css" href="../assets/vendors/css/cryptocoins/cryptocoins.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/timeline.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/pages/dashboard-ico.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <!-- END Custom CSS-->
+  </head>
+  <body class="vertical-layout vertical-compact-menu 2-columns   menu-expanded fixed-navbar" data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+
+    <!-- fixed-top-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-light navbar-bg-color">
+      <div class="navbar-wrapper">
+        <div class="navbar-header d-md-none">
+          <ul class="nav navbar-nav flex-row">
+            <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+            <li class="nav-item d-md-none"><a class="navbar-brand" href="/dashboard"><img class="brand-logo d-none d-md-block" alt="CryptoDash admin logo" src="../assets/images/logo/logo.png"><img class="brand-logo d-sm-block d-md-none" alt="CryptoDash admin logo sm" src="../assets/images/logo/logo-sm.png"></a></li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <div class="main-menu menu-fixed menu-dark menu-bg-default rounded menu-accordion menu-shadow">
+      <div class="main-menu-content"><a class="navigation-brand d-none d-md-block d-lg-block d-xl-block" href="/dashboard"><img class="brand-logo" src="../assets/images/logo/logo.png"/></a>
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+          <li class="nav-item"><a href="/dashboard"><i class="icon-grid"></i><span class="menu-title" data-i18n="">Dashboard</span></a>
+          </li>
+          <li class=" nav-item"><a href="/profile"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Profile</span></a>
+          </li>
+          <%if(status == 'Active'){%>
+            <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Upgrade</span></a>
+            </li>
+                
+          <li class="active"><a href="#"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">My team</span></a>
+            <ul class="menu-content">
+              <li><a class="menu-item" href="/clubTeam">Team Club</a>
+              </li>
+              <li><a class="menu-item" href="/downline">Downline</a>
+              </li>
+            </ul>
+          </li>
+          <%}else{%>
+            <li class=" nav-item"><a href="/paymentGateway"><i class="icon-wallet"></i><span class="menu-title" data-i18n="">Join today</span></a>
+            </li>
+            <li class=" nav-item"><a href="/downline"><i class="icon-user-following"></i><span class="menu-title" data-i18n="">Downline</span></a>
+            </li>
+          <%}%>
+          <li class=" nav-item"><a href="/transaction"><i class="icon-shuffle"></i><span class="menu-title" data-i18n="">Transactions</span></a>
+          </li>
+          <li class=" nav-item mt-3"><a href="/log-out"><span class="menu-title" data-i18n="">Log out</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="app-content content">
+      <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header row">
+              <div class="content-header-left col-md-8 col-12 mx-2 mb-2 breadcrumb-new">
+                <h3 class="content-header-title mb-0 d-inline-block">Account Team</h3>
+                <div class="row breadcrumbs-top d-inline-block">
+                  <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a>
+                      </li>
+                      <li class="breadcrumb-item active">Account Team
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="content-body">
+<!--Overview -->
+<!-- Account Balance -->
+<div class="row">
+    <div class="col-md-8 col-12">
+        <div class="card pull-up">
+            <div class="card-content">
+                <div class="card-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <h3 class="availableBalance">My Network</h3>
+                            </div>
+                            <div class="col-md-2 col-12 py-1">
+                                <p class="mb-0"><span class="d-inline-block d-md-none text-bold-700">Total downline: </span> <%=totalDownline%> </p>
+                            </div>
+                            <div class="col-md-1 col-12 py-1 mb-1">
+                                <p class="mb-0"><span class="d-inline-block d-md-none text-bold-700">Active downlines: </span> <%=totalActive%></p>
+                            </div>
+                            <hr class="py-1">
+                            <div class="col-md-8 col-12">
+                                <h5 class="availableBalance">Club Network</h5>
+                            </div>
+                            <div class="table-responsive">
+                                  <table class="table table-de mb-0">                    
+                                    <tbody>
+                                        <tr>
+                                          <td>Level 1</td>
+                                          <td> <%=level1%></td>
+                                        </tr>
+                                      <tr>
+                                        <td>Level 2</td>
+                                        <td> <%=level2%></td>
+                                      </tr>
+                                      <tr>
+                                        <td>Level 3</td>
+                                        <td> <%=level3%></td>                        
+                                      </tr>
+                                      <tr>
+                                        <td>Level 4</td>
+                                        <td><%=level4%></td>                        
+                                      </tr>
+                                      <tr>
+                                        <td>Level 5</td>
+                                        <td><%=level5%></td>                        
+                                      </tr>  
+                                      <tr>
+                                        <td>Level 6</td>
+                                        <td> <%=level6%> </td>                        
+                                      </tr>                          
+                                    </tbody>
+                                  </table>
+                            </div>
+                            <div class="col-md-3 col-12 py-1">
+                                <p class="mb-0"><span class="d-inline-block d-md-none text-bold-700">Club level acheived: </span> 
+                                  <button type="button" class="btn-gradient-primary"> Level <%=clubLevel%> </button> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-12">
+      <%if(stage == true){%>
+        
+        <section class="card pull-up">
+          <div class="card-content">
+              <div class="card-body">
+                 <h4 class="mb-2"><%=memberName%>'s Team Details</h4>
+                  <div class="col-12">
+                      <div class="row">
+                        <%team.forEach(function(user, index){%>
+                          <div class="col-12 col-md-4">
+                            <p class="text-bold-700 text-uppercase mb-0">Team <%=index + 1%></p>
+                            <p class="mb-0 mt-1"><%=user.username%> <span class="font-small-3 clearfix float-right"><a href="/clubTeam/<%=user.userID%>" class="mb-0 btn-sm btn btn-outline-warning round">View Team</a></span></p>
+                            <p class="mb-0 mt-1"><%=user.userID%></p>
+                            
+                        </div>
+                        <hr class="p-1">
+                        <%});%>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+      <%}else{%>
+        <h4 class="my-2">No team found</h4>
+
+        <%if(teamMemberDirect.length != 0){%>
+            <h6 class="my-2">Available downline</h6>
+            <div class="row">
+                <div id="recent-transactions" class="col-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table id="recent-orders" class="table table-hover table-xl mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">SI.no</th>
+                                            <th class="border-top-0">Username</th>
+                                            <th class="border-top-0">User ID</th>
+                                            <th class="border-top-0">Status</th>
+                                            <th class="border-top-0">Package</th>
+                                            <th class="border-top-0">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%console.log(teamMemberDirect)%>
+                        <%teamMemberDirect.forEach(function(user, index){%>
+                            <%if(user.status == 'Active'){%>
+                                            <tr>
+                                                <td class="text-truncate"><%= index + 1 %></td>
+                                                <td class="text-truncate"><i class="la la-dot-circle-o success font-medium-1 mr-1"></i> <%=user.username%></td>
+                                                <td class="text-truncate p-1"><%=user.userID%></td>
+                                                <td><%=user.status%></td>
+                                                <td><%=user.package.stage%></td>
+                                                <td class="text-truncate"><a href="#"> <%=user.time.date%>/<%=user.time.month%>/<%=user.time.year%> </a></td>
+                                            </tr>
+                            <%}else{%>
+                                            <tr>
+                                                <td class="text-truncate"><%= index + 1 %></td>
+                                                <td class="text-truncate"><i class="la la-dot-circle-o warning font-medium-1 mr-1"></i> <%=user.username%></td>
+                                                <td class="text-truncate p-1"><%=user.userID%></td>
+                                                <td><%=user.status%></td>
+                                                <td>Nil</td>
+                                                <td class="text-truncate"><a href="#"><%=user.time.date%>/<%=user.time.month%>/<%=user.time.year%></a></td>
+                                            </tr>
+                            <%}%>
+                       <% });%>
+            
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <%}else{%>
+            
+            <br><br>
+            <div class="">
+                <h6 class="mb-1 text-dark text-sm">No Downlines found.</h6>
+            </div>
+    
+        <%}%>
+
+      <%}%>
+        
+    </div>
+</div>
+<!--/ Account Balance -->
+        </div>
+      </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+
+    <footer class="footer footer-static footer-transparent">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span class="float-md-left d-block d-md-inline-block">Copyright  &copy; <script>
+          document.write(new Date().getFullYear())
+          </script>, All rights reserved. </span></p>
+    </footer>
+
+    <!-- BEGIN VENDOR JS-->
+    <script src="../assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="../assets/vendors/js/timeline/horizontal-timeline.js" type="text/javascript"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN MODERN JS-->
+    <script src="../assets/js/core/app-menu.js" type="text/javascript"></script>
+    <script src="../assets/js/core/app.js" type="text/javascript"></script>
+    <script src="../assets/js/response.js" type="text/javascript"></script>
+    <script src="../assets/js/request.js" type="text/javascript"></script>
+    <!-- END MODERN JS-->
+  </body>
+</html>
