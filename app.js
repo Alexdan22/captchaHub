@@ -272,6 +272,28 @@ const Pin = new mongoose.model('Pin', pinSchema);
 const Switch = new mongoose.model('Switch', withdrawalSchema);
 
 
+//Automated Functions
+var job = schedule.scheduleJob('0 4 * * *', async(scheduledTime) => {
+  try {
+    const cooldown = await User.find({status: 'Active'});
+    for (const users of cooldown) {
+      if (users.package.status === 'Cooldown') {
+        await User.updateOne({ email: users.email }, { $set: { 
+          'package.stage': users.package.stage,
+          'package.days': users.package.days,
+          'package.status': 'Active',
+          'package.time.date': users.package.time.date,
+          'package.time.month': users.package.time.month,
+          'package.time.year': users.package.time.year
+        }});
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 //ROUTES
 app.get("/", function(req, res){
   const alert = "false";
@@ -357,28 +379,58 @@ app.get("/dashboard", async (req, res) => {
     } = foundUser;
 
     const alert = 'nil';
+    const foundSponsor = await User.findOne({userID: foundUser.sponsorID});
 
-    res.render("dashboard", {
-      name,
-      email,
-      mode:mode.mode,
-      userID,
-      captcha,
-      franchise,
-      total,
-      direct,
-      level,
-      club,
-      addition,
-      addition2,
-      addition3,
-      currentCount,
-      balance,
-      package,
-      alert,
-      time,
-      status
-    });
+      if(!foundSponsor){
+        //With no Registered Sponsor ID
+        res.render("dashboard", {
+          name,
+          email,
+          mode:mode.mode,
+          userID,
+          captcha,
+          franchise,
+          total,
+          direct,
+          level,
+          club,
+          addition,
+          addition2,
+          addition3,
+          currentCount,
+          balance,
+          package,
+          alert,
+          time,
+          sponsorID:foundUser.sponsorID,
+          status
+        });
+      }else{
+        //With registered sponsor ID
+        res.render("dashboard", {
+          name,
+          email,
+          mode:mode.mode,
+          userID,
+          captcha,
+          franchise,
+          total,
+          direct,
+          level,
+          club,
+          addition,
+          addition2,
+          addition3,
+          currentCount,
+          balance,
+          package,
+          alert,
+          time,
+          sponsorID:foundSponsor.username,
+          status
+        });
+      }
+    
   } catch (err) {
     console.log(err);
     res.status(500).send("An error occurred. Please try again later.");
@@ -913,7 +965,7 @@ if(!req.session.admin){
       const users = await User.find({});
 
       // Extract mobile numbers
-      const mobileNumbers = users.map(user => ({"Email": user.email, "Mobile Number": user.mobile }));
+      const mobileNumbers = users.map(user => ({"Email": user.email, "Mobile Number": user.mobile, "Available Balance": user.earnings.balance }));
 
       // Create a new workbook
       const wb = xlsx.utils.book_new();
@@ -4320,12 +4372,16 @@ app.post('/api/clubMemberUpdate', async (req, res)=>{
             stage:true
           }
         }});
-        console.log('All members are unique');
-        res.status(200).send('All members are unique');
+        res.status(200).send({
+          alertType : "success",
+          alert : "true",
+          message: 'Club members updated successfully'});
       } else {
         // Some values are the same
-        console.log('Members must be unique');
-        res.status(200).send('Members must be unique');
+        res.status(200).send({
+          alertType : "warning",
+          alert : "true",
+          message: 'Members must be unique'});
       }
       
     } catch (err) {

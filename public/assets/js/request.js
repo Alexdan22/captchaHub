@@ -532,6 +532,49 @@ const generatePin = function(){
   });
 }
 
+//Club member update
+const updateTeamMembers = function(){
+  member1 = document.getElementById('member1').value
+  member2 = document.getElementById('member2').value
+  member3 = document.getElementById('member3').value
+  member4 = document.getElementById('member4').value
+  $.ajax({
+    url: '/api/clubMemberUpdate',
+    // dataType: "jsonp",
+    data: {
+      member1,
+      member2,
+      member3,
+      member4,
+    },
+    type: 'POST',
+    success: function (data) {
+      if( data.redirect == undefined){
+        document.getElementById('alert').innerHTML = `
+          <div class="alert `+data.alertType+`">
+              <span class="closebtn" onclick="closebtn()" id="closebtn">&times;</span>
+              <p class='text-white'>`+data.message+`</p>
+            </div>`
+
+            var div = document.getElementById("alert");
+            div.style.opacity = "1";
+            div.style.display = "block";
+
+        if(data.alertType == 'success'){
+          dashboard2000();
+        }
+        
+      }else{
+        login2000();
+      }
+    },
+    error: function (status, error) {
+        console.log('Error: ' + error.message);
+    },
+  });
+}
+
+
   
 
 
