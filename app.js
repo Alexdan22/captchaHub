@@ -279,12 +279,16 @@ var job = schedule.scheduleJob('30 1 * * *', async(scheduledTime) => {
     for (const users of cooldown) {
       if (users.package.status === 'Cooldown') {
         await User.updateOne({ email: users.email }, { $set: { 
-          'package.stage': users.package.stage,
-          'package.days': users.package.days,
-          'package.status': 'Active',
-          'package.time.date': users.package.time.date,
-          'package.time.month': users.package.time.month,
-          'package.time.year': users.package.time.year
+          package: {
+            stage:users.package.stage,
+            days:users.package.days,
+            status: 'Active',
+            time:{
+              date:users.package.time.date,
+              month:users.package.time.month,
+              year:users.package.time.year
+            }
+          }
         }});
       }
     }
@@ -3324,6 +3328,59 @@ app.post('/creditBalance', async (req, res)=>{
       const newTransaction = {
         type: 'Credit',
         from: 'Income',
+        amount: req.body.amount,
+        status: 'success',
+        time: { date, month, year },
+        trnxId: trnxID
+      };
+  
+      await User.updateOne({ email: foundUser.email }, {
+        $push: { transaction: newTransaction }
+      });
+      res.redirect('/admin');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+});
+
+app.post('/creditBonus', async (req, res)=>{
+  const timeZone = 'Asia/Kolkata';
+  const currentTimeInTimeZone = DateTime.now().setZone(timeZone);
+
+  let year = currentTimeInTimeZone.year;
+  let month = currentTimeInTimeZone.month;
+  let date = currentTimeInTimeZone.day;
+
+
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      
+      const foundUser = await User.findOne({email:req.body.email});
+      await User.updateOne({ email: foundUser.email }, {
+        $set: {
+          earnings: {
+            captcha: foundUser.earnings.captcha,
+                franchise: foundUser.earnings.franchise,
+                total: foundUser.earnings.total + Math.floor(Number(req.body.amount)),
+                direct: foundUser.earnings.direct,
+                level: foundUser.earnings.level,
+                club: foundUser.earnings.club,
+                addition: foundUser.earnings.addition,
+                addition2: foundUser.earnings.addition2,
+                addition3: foundUser.earnings.addition3 + Math.floor(Number(req.body.amount)),
+                balance: foundUser.earnings.balance + Math.floor(Number(req.body.amount))
+          }
+        }
+      });
+  
+      const trnxID = String(Math.floor(Math.random() * 9999999));
+  
+      const newTransaction = {
+        type: 'Credit',
+        from: 'Bonus Income',
         amount: req.body.amount,
         status: 'success',
         time: { date, month, year },
