@@ -1734,6 +1734,23 @@ app.get('/api/clubIncomeCredit', async (req, res)=>{
       
     }
   }
+});
+
+app.get('/api/autobot', async (req,res)=>{
+  if(!req.session.admin){
+    res.redirect('/adminLogin');
+  }else{
+    try {
+      const foundAdmin = await Admin.findOne({email: process.env.ADMIN});
+      res.status(200).render('autobotHistory',{
+        transaction: foundAdmin.autobot
+      });
+
+    } catch (err) {
+      console.log(err);
+      
+    }
+  }
 })
 
 
