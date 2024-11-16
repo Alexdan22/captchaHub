@@ -467,10 +467,10 @@ app.get("/profile", async (req, res) =>{
       if(!foundSponsor){
         //With no Registered Sponsor ID
         
-        res.render('profile', {username, email, userID,status, mobile, bank,  sponsorID:foundUser.sponsorID});
+        res.render('profile', {username, email, userID,status, mobile, bank, sponsor:false,  sponsorID:foundUser.sponsorID});
       }else{
         //With registered sponsor ID
-          res.render('profile', {username, email, userID,status, mobile, bank, sponsorID:foundSponsor.username});
+          res.render('profile', {username, email, userID,status, mobile, bank, sponsor:true, sponsorID:foundUser.sponsorID, sponsorName:foundSponsor.username});
       }
   
     }else{
@@ -479,10 +479,10 @@ app.get("/profile", async (req, res) =>{
       if(!foundSponsor){
         //With no Registered Sponsor ID
         
-        res.render('profile', {username, email, userID,status, mobile, bank, bankDetails:foundUser.bankDetails,  sponsorID:foundUser.sponsorID});
+        res.render('profile', {username, email, userID,status, mobile, bank, bankDetails:foundUser.bankDetails, sponsor:false,  sponsorID:foundUser.sponsorID});
       }else{
         //With registered sponsor ID
-          res.render('profile', {username, email, userID,status, mobile, bank, bankDetails:foundUser.bankDetails, sponsorID:foundSponsor.username});
+          res.render('profile', {username, email, userID,status, mobile, bank, bankDetails:foundUser.bankDetails, sponsor:true, sponsorID:foundUser.sponsorID, sponsorName:foundSponsor.username});
       }
   
     }
@@ -1120,7 +1120,6 @@ app.get("/clubTeam", async (req, res) => {
       // Level 6 Downline
       level6Downline = await handleDownline(level5Downline);
     
-      const totalCount = foundDirect.length + level1Downline.length + level2Downline.length + level3Downline.length + level4Downline.length + level5Downline.length + level6Downline.length;
     // Combine all downlines into totalDownline 
       totalDownline = [ 
         ...foundDirect, 
@@ -1916,7 +1915,12 @@ app.post('/planActivation', async (req, res) => {
   if (!req.session.admin) {
     res.redirect('/adminLogin');
   } else {
-    const amount = Number(req.body.amount);
+    let amount;
+    if(Number(req.body.amount) == 175){
+      amount = 240;
+    }else{
+      amount = Number(req.body.amount);
+    }
     const trnxId = Number(req.body.trnxId);
     const directPercentage = Number(req.body.directPercentage);
     let levels = {
@@ -3467,38 +3471,79 @@ app.post('/api/createPin', async (req, res) => {
                 month: month,
                 year: year
               } }).save();
-              //update user balance
-              await User.updateOne({ email: req.session.user.email }, {
-                $set: {
-                  earnings: {
-                    captcha: foundUser.earnings.captcha,
-                    franchise: foundUser.earnings.franchise,
-                    total: foundUser.earnings.total,
-                    direct: foundUser.earnings.direct,
-                    level: foundUser.earnings.level,
-                    club: foundUser.earnings.club,
-                    addition: foundUser.earnings.addition,
-                    addition2: foundUser.earnings.addition2,
-                    addition3: foundUser.earnings.addition3,
-                    balance: foundUser.earnings.balance - amount
+
+              //Temprovary Offer Code start
+              if(amount == 240){
+
+                //update user balance
+                await User.updateOne({ email: req.session.user.email }, {
+                  $set: {
+                    earnings: {
+                      captcha: foundUser.earnings.captcha,
+                      franchise: foundUser.earnings.franchise,
+                      total: foundUser.earnings.total,
+                      direct: foundUser.earnings.direct,
+                      level: foundUser.earnings.level,
+                      club: foundUser.earnings.club,
+                      addition: foundUser.earnings.addition,
+                      addition2: foundUser.earnings.addition2,
+                      addition3: foundUser.earnings.addition3,
+                      balance: foundUser.earnings.balance - 175
+                    }
                   }
-                }
-              });
-          
-              const trnxID = String(Math.floor(Math.random() * 999999999));
-          
-              const newTransaction = {
-                type: 'Debit',
-                from: 'Pin Generation',
-                amount: req.body.amount,
-                status: 'success',
-                time: { date, month, year },
-                trnxId: trnxID
-              };
-          
-              await User.updateOne({ email: req.session.user.email }, {
-                $push: { transaction: newTransaction }
-              });
+                });
+            
+                const trnxID = String(Math.floor(Math.random() * 999999999));
+            
+                const newTransaction = {
+                  type: 'Debit',
+                  from: 'Pin Generation',
+                  amount: 175,
+                  status: 'success',
+                  time: { date, month, year },
+                  trnxId: trnxID
+                };
+            
+                await User.updateOne({ email: req.session.user.email }, {
+                  $push: { transaction: newTransaction }
+                });
+              }else{
+                
+                //update user balance
+                await User.updateOne({ email: req.session.user.email }, {
+                  $set: {
+                    earnings: {
+                      captcha: foundUser.earnings.captcha,
+                      franchise: foundUser.earnings.franchise,
+                      total: foundUser.earnings.total,
+                      direct: foundUser.earnings.direct,
+                      level: foundUser.earnings.level,
+                      club: foundUser.earnings.club,
+                      addition: foundUser.earnings.addition,
+                      addition2: foundUser.earnings.addition2,
+                      addition3: foundUser.earnings.addition3,
+                      balance: foundUser.earnings.balance - amount
+                    }
+                  }
+                });
+            
+                const trnxID = String(Math.floor(Math.random() * 999999999));
+            
+                const newTransaction = {
+                  type: 'Debit',
+                  from: 'Pin Generation',
+                  amount: req.body.amount,
+                  status: 'success',
+                  time: { date, month, year },
+                  trnxId: trnxID
+                };
+            
+                await User.updateOne({ email: req.session.user.email }, {
+                  $push: { transaction: newTransaction }
+                });
+              }
+              //Temprovary Offer Code End
+
 
               //update pin count
               if(amount == 240){
@@ -3691,7 +3736,7 @@ app.post('/activateUser', async (req, res)=>{
       const activate = await User.findOne({userID:req.body.userID});
       const pin = await Pin.findOne({pin:req.body.pin});
       if(activate){
-        console.log(pin, activate, req.body);
+        console.log(pin, req.body);
         
         if(pin.status == 'Active'){
           
@@ -3709,7 +3754,7 @@ app.post('/activateUser', async (req, res)=>{
         await Pin.updateOne({pin:req.body.pin}, {$set:{status:'Redeemed'}});
 
         const amount = Number(pin.amount);
-        const trnxId = Number(req.body.pin);
+        const trnxId = req.body.pin;
         const directPercentage = 0.10;  
         let levels = {
           level1: 0,
@@ -4464,6 +4509,29 @@ app.post('/api/clubMemberUpdate', async (req, res)=>{
     }
   }
 });
+
+app.post('/unsetBankDetails', async (req, res) => {
+  if (!req.session.admin) {
+    res.redirect('/adminLogin');
+  } else {
+    try {
+      const foundUser = await User.findOne({ email: req.body.email });
+      if (!foundUser) {
+        return res.redirect('/admin');
+      }
+
+      if (req.body.validation === "CONFIRM") {
+        await User.updateOne({ email: req.body.email }, { $unset: { bankDetails: 1 } });
+      }
+
+      res.redirect('/admin');
+    } catch (err) {
+      console.error(err);
+      res.redirect('/admin');
+    }
+  }
+});
+
 
 
 

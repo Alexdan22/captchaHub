@@ -279,6 +279,7 @@ const withdraw = function(){
       },
       type: 'POST',
       success: function (data) {
+        
         if( data.redirect == undefined){
           const availableBalance = function(){
             if(data.alert == 'true'){

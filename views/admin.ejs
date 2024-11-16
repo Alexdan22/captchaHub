@@ -271,6 +271,51 @@
             <div class="card-header">
                 <h6 class="card-title text-center">User details</h6>            
             </div>
+            <div class="font-small-3 clearfix">
+                <button type="button"data-toggle="modal" data-target="#bankDeatils" class="float-right btn btn-danger text-white text-right">Unset Bank</button>
+                
+            </div>
+            
+            <div class="modal fade" id="bankDeatils" tabindex="-1" role="dialog" aria-labelledby="bankDeatils" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="purchaseModalLabel">Activate ID</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <form class="form form-horizontal my-2 mx-2" method="post" action="/unsetBankDetails">
+                                        <div class="form-body">
+                                            <div class="row">
+                                                <div class="col-12 col-md-5">
+                                                    <div class="col-12">
+                                                        <fieldset class="form-label-group">
+                                                            <input type="text" class="form-control" name="validation" id="userID"  required="" autofocus="">
+                                                            <label for="userID">Enter CONFIRM</label>
+                                                        </fieldset>
+                                                        <fieldset class="form-label-group">
+                                                            <input type="text" class="form-control" name="email" id="userID"  required="" autofocus="">
+                                                            <label for="userID">Enter Email</label>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-md-4 col-12 text-center text-md-right">
+                                                        <button type="submit" class="btn-gradient-secondary mt-2">Confirm <i class="la la-angle-right"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div id="alert"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
             <div class="card-content collapse show">
                 <div class="card-body">
                 <hr>

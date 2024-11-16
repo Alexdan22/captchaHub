@@ -114,6 +114,10 @@
                                         <p class="mb-0"><%=username%></p>
                                     </div>
                                     <div class="col-12 col-md-4">
+                                        <p class="text-bold-700 text-uppercase mb-0">User ID</p>
+                                        <p class="mb-0"><%=userID%></p>
+                                    </div>
+                                    <div class="col-12 col-md-4">
                                         <p class="text-bold-700 text-uppercase mb-0">Email</p>
                                         <p class="mb-0"><%=email%></p>
                                     </div>
@@ -128,14 +132,21 @@
                                             <p class="mb-0">+91 <%=mobile%></p>
                                         </div>
                                     <%}%>
-                                    <div class="col-12 col-md-4">
-                                        <p class="text-bold-700 text-uppercase mb-0">User ID</p>
-                                        <p class="mb-0"><%=userID%></p>
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <p class="text-bold-700 text-uppercase mb-0">Sponsor ID</p>
-                                        <p class="mb-0"><%=sponsorID%></p>
-                                    </div>
+                                    <%if(sponsor === true){%>
+                                        <div class="col-12 col-md-4">
+                                            <p class="text-bold-700 text-uppercase mb-0">Sponsor Name</p>
+                                            <p class="mb-0"><%=sponsorName%></p>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <p class="text-bold-700 text-uppercase mb-0">Sponsor ID</p>
+                                            <p class="mb-0"><%=sponsorID%></p>
+                                        </div>
+                                    <%}else{%>
+                                        <div class="col-12 col-md-4">
+                                            <p class="text-bold-700 text-uppercase mb-0">Sponsor ID</p>
+                                            <p class="mb-0"><%=sponsorID%></p>
+                                        </div>
+                                    <%}%>
                                     <div class="col-12 col-md-4">
                                         <p class="text-bold-700 text-uppercase mb-0">Status</p>
                                         <p class="mb-0"><%=status%></p>
