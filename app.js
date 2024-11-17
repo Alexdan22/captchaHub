@@ -969,7 +969,7 @@ if(!req.session.admin){
       const users = await User.find({});
 
       // Extract mobile numbers
-      const mobileNumbers = users.map(user => ({"Email": user.email, "Mobile Number": user.mobile, "Available Balance": user.earnings.balance }));
+      const mobileNumbers = users.map(user => ({"Name":user.username, "Email": user.email, "User ID": user.userID, "Mobile Number": `+91${user.mobile}`, "Total Earnings": user.earnings.total, "Available Balance": user.earnings.balance, "Status": user.status, "Sponsor ID": user.sponsorID }));
 
       // Create a new workbook
       const wb = xlsx.utils.book_new();
@@ -1750,7 +1750,9 @@ app.get('/api/autobot', async (req,res)=>{
       
     }
   }
-})
+});
+
+app.get('/adminDownline')
 
 
 
